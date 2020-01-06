@@ -3,6 +3,9 @@ public class Queue {
     private Bomb[] queue; // Array used to implement the Queue
 
     private int length; // tracks the amount of items in the queue
+    
+
+	protected long timer; // timer used to track when to dequeue the next bomb
 
     public Queue()
     {

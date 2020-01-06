@@ -13,5 +13,6 @@ public class BombBoost extends Item {
     @Override
     public void powerUp(Player player) {
 
+    	player.bombBoosts += 1;
     }
 }

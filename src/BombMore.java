@@ -12,6 +12,8 @@ public class BombMore extends Item {
 
     @Override
     public void powerUp(Player player) {
+    	
+    	player.bombMores += 1;
 
     }
 }

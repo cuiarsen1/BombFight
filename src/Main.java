@@ -16,7 +16,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
 
         // TESTING
-        Player player1 = new Player(0,0);
+        Player player1 = new Player(0, 0);
 
         Pair pair = new Pair(1, player1);
         int a = pair.type;
