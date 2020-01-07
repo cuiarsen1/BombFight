@@ -1,7 +1,7 @@
-public abstract class Entity {
+public abstract class Entity extends Main {
 
-    private int x;
-    private int y;
+    protected int x;
+    protected int y;
 
     public Entity(int x, int y)
     {

@@ -1,4 +1,5 @@
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Player extends Entity {
 	
@@ -27,14 +28,20 @@ public class Player extends Entity {
     	if (playerNum == 1)
     	{
     		Image playerImage = new Image("PlayerRed.png");
+    		
+    		ImageView playerView = new ImageView(playerImage);
+    		
+    		playerViews.add(playerView);
+    		
     	}
     	
     	else if (playerNum == 2)
     	{
     		Image playerImage = new Image("PlayerBlue.png");
-    	}
-    	
-    	
-    	
+    		
+    		ImageView playerView = new ImageView(playerImage);
+    		
+    		playerViews.add(playerView);
+    	}	
     }
 }
