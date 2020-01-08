@@ -41,17 +41,24 @@ public class Main extends Application {
     	
     	
     	
-    	//Player player1 = new Player(0, 0, 1);
+    	Player player1 = new Player(1, 1, 1);
+    	
+    	player1.createImage("file:\\G:\\My Drive\\ICS Grade 12\\BombFight\\PlayerRed.png");
+    	playerList.add(player1);
+    	
+    	root = new VBox();
+    	
+    	root.getChildren().addAll(playerViews);
 
     	 // TESTING
        // Pair pair = new Pair(1, player1);
         //int a = pair.type;
         
-    	Image tempCrate = new Image("file:\\G:\\My Drive\\ICS Grade 12\\BombFight\\Crate.png");
-        ImageView tempView = new ImageView();
-        tempView.setFitHeight(50);
-        tempView.setFitWidth(50);
-        tempView.setImage(tempCrate);
+   /* 	Image tempCrate = new Image("file:\\G:\\My Drive\\ICS Grade 12\\BombFight\\Crate.png");
+        ImageView tempCrateView = new ImageView();
+        tempCrateView.setFitHeight(50);
+        tempCrateView.setFitWidth(50);
+        tempCrateView.setImage(tempCrate);
         
         Image player = new Image("file:\\G:\\My Drive\\ICS Grade 12\\BombFight\\PlayerRed.png");
         ImageView playerView = new ImageView();
@@ -63,7 +70,7 @@ public class Main extends Application {
         
         HBox hbox = new HBox();
         
-        pane.getChildren().addAll(tempView, playerView);
+        pane.getChildren().addAll(tempCrateView, playerView);
         
         hbox.getChildren().addAll(pane);
        
@@ -103,7 +110,7 @@ public class Main extends Application {
     		
     		root.getChildren().add(tempbox);
     	}
-        
+        */
         Scene scene = new Scene(root, 600, 600);
         
         primaryStage.setTitle("Mouse Simulator");
