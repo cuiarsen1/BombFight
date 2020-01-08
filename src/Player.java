@@ -1,5 +1,6 @@
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 
 public class Player extends Entity {
 	
@@ -42,6 +43,13 @@ public class Player extends Entity {
     		ImageView playerView = new ImageView(playerImage);
     		
     		playerViews.add(playerView);
-    	}	
+    	}
+    	
+    	HBox row = (HBox)root.getChildren().get(y);
+    	row.getChildren().get(x);
+    	
+    	// make all indexes a stackpane, whether or not there is anything to stack so you know it 
+    	// is always a stackpane so you can add cast to stackpane
+    	
     }
 }

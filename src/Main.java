@@ -14,12 +14,16 @@ import java.util.ArrayList;
 public class Main extends Application {
 
     private ArrayList<Player> playerList;
-    private ArrayList<Bomb> bombList = new ArrayList();
+    private ArrayList<Bomb> bombList;
 
     protected ArrayList<ImageView> playerViews;
     protected ArrayList<ImageView> bombViews;
+    protected ArrayList<ImageView> crateViews;
+    protected ArrayList<ImageView> spaceViews;
+    protected ArrayList<ImageView> bombMoreViews;
+    protected ArrayList<ImageView> bombBoostViews;
     
-    protected HBox hbox;
+    VBox root; // root VBox displaying the main scene
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -29,6 +33,11 @@ public class Main extends Application {
     	
     	playerViews = new ArrayList();
     	bombViews = new ArrayList();
+    	crateViews = new ArrayList();
+    	spaceViews = new ArrayList();
+    	bombMoreViews = new ArrayList();
+    	bombBoostViews = new ArrayList();
+    	
     	
     	
     	
@@ -52,27 +61,48 @@ public class Main extends Application {
         
         StackPane pane = new StackPane();
         
-        hbox = new HBox();
+        HBox hbox = new HBox();
         
         pane.getChildren().addAll(tempView, playerView);
         
         hbox.getChildren().addAll(pane);
+       
+        root = new VBox();
         
-        for (int i = 0; i < 11; i += 1)
-        {
-        	Image crate = new Image("file:\\G:\\My Drive\\ICS Grade 12\\BombFight\\Crate.png");
-            ImageView crateView = new ImageView();
-            crateView.setFitHeight(50);
-            crateView.setFitWidth(50);
-            crateView.setImage(crate);
-        	hbox.getChildren().add(crateView);
-        }
-        
-        VBox root = new VBox(); // root VBox displaying the main scene
-        
-        // maybe make a for loop to create new hbox rows to add some number of hboxes without repeat code.
+    	for (int j = 0; j < 11; j += 1)
+	    {
+    		Image crate = new Image("file:\\G:\\My Drive\\ICS Grade 12\\BombFight\\Crate.png");
+	        ImageView crateView = new ImageView();
+	        crateView.setFitHeight(50);
+	        crateView.setFitWidth(50);
+	        crateView.setImage(crate);
+	        StackPane temppane = new StackPane();
+	        temppane.getChildren().addAll(crateView);
+	     	hbox.getChildren().add(temppane);
+	    }
+    	// maybe make a for loop to create new hbox rows to add some number of hboxes without repeat code.
         // of course, some rows are different, with spaces instead of crates, but just hard code that part too.
-        root.getChildren().add(hbox);
+    	root.getChildren().add(hbox);
+    	
+    	for (int i = 0; i < 11; i += 1)
+    	{
+    		HBox tempbox = new HBox();
+    		
+    		for (int j = 0; j < 12; j += 1)
+    		{
+    			Image crate = new Image("file:\\G:\\My Drive\\ICS Grade 12\\BombFight\\Crate.png");
+    	        ImageView crateView = new ImageView();       
+    	       
+    	        crateView.setFitHeight(50);
+    	        crateView.setFitWidth(50);
+    	        crateView.setImage(crate);
+    	        StackPane temppane = new StackPane();
+    	        temppane.getChildren().addAll(crateView);
+    	        tempbox.getChildren().add(temppane);
+    		}
+    		
+    		root.getChildren().add(tempbox);
+    	}
         
         Scene scene = new Scene(root, 600, 600);
         
