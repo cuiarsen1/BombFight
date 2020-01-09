@@ -1,6 +1,7 @@
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 
 public class Player extends Entity {
@@ -31,25 +32,32 @@ public class Player extends Entity {
     	
     	if (playerNum == 1)
     	{
-    		Image playerImage = new Image("file:\\G:\\My Drive\\ICS Grade 12\\BombFight\\PlayerRed.png");
+    		Image playerImage = new Image("file:PlayerRed.png");
     		
     		playerView = new ImageView(playerImage);
+    		playerView.setFitHeight(50);
+    		playerView.setFitWidth(50);
     	}
     	
     	else if (playerNum == 2)
     	{
-    		Image playerImage = new Image("file:\\G:\\My Drive\\ICS Grade 12\\BombFight\\PlayerBlue.png");
+    		Image playerImage = new Image("file:PlayerBlue.png");
     		
     		playerView = new ImageView(playerImage);
+    		playerView.setFitHeight(50);
+    		playerView.setFitWidth(50);
     	}
     	
     	playerViews.add(playerView);
     	
-    	HBox row = (HBox)root.getChildren().get(y - 1);
-    	StackPane coordinate = (StackPane) row.getChildren().get(x - 1);
+    	HBox row = (HBox)root.getChildren().get(y);
+    	StackPane coordinate = (StackPane) row.getChildren().get(x);
     	
-    	Image spaceImage = new Image("file:\\G:\\My Drive\\ICS Grade 12\\BombFight\\Space.png");
+    	Image spaceImage = new Image("file:Space.png");
+    	
     	ImageView spaceImageView = new ImageView(spaceImage);
+		spaceImageView.setFitHeight(50);
+		spaceImageView.setFitWidth(50);
     	
     	coordinate.getChildren().setAll(spaceImageView, playerView);
     	
