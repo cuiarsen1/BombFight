@@ -1,3 +1,5 @@
+import javafx.scene.image.ImageView;
+
 public abstract class Entity extends Main {
 
     protected int x;

@@ -23,32 +23,20 @@ public class Player extends Entity {
         bombMores = 0;
     }
 
-    @Override
+ /*   @Override
     public void createImage(String imageFile) {
 
     	// creates image and adds it to arraylist of imageviews in main
     	
     	ImageView playerView = new ImageView();
     	
-    	if (playerNum == 1)
-    	{
-    		Image playerImage = new Image("file:PlayerRed.png");
-    		
-    		playerView = new ImageView(playerImage);
-    		playerView.setFitHeight(50);
-    		playerView.setFitWidth(50);
-    	}
-    	
-    	else if (playerNum == 2)
-    	{
-    		Image playerImage = new Image("file:PlayerBlue.png");
-    		
-    		playerView = new ImageView(playerImage);
-    		playerView.setFitHeight(50);
-    		playerView.setFitWidth(50);
-    	}
-    	
-    	playerViews.add(playerView);
+		Image playerImage = new Image("file:" + imageFile);
+		
+		playerView = new ImageView(playerImage);
+		playerView.setFitHeight(50);
+		playerView.setFitWidth(50);
+		
+		playerViews.add(playerView);
     	
     	HBox row = (HBox)root.getChildren().get(y);
     	StackPane coordinate = (StackPane) row.getChildren().get(x);
@@ -61,6 +49,41 @@ public class Player extends Entity {
     	
     	coordinate.getChildren().setAll(spaceImageView, playerView);
     	
+    	
+    	// when player on top of space, no need to create space image. only when space is empty
+    	// do u need space image, and when player moves, make the previous grid they were on a space
+    	
+    	
+    	// make all indexes a stackpane, whether or not there is anything to stack so you know it 
+    	// is always a stackpane so you can add cast to stackpane
+    	
+    }*/
+    
+    @Override
+    public void createImage(String imageFile) {
+
+    	// creates image and adds it to arraylist of imageviews in main
+    	
+    	ImageView playerView = new ImageView();
+    	
+		Image playerImage = new Image("file:" + imageFile);
+		
+		playerView = new ImageView(playerImage);
+		playerView.setFitHeight(50);
+		playerView.setFitWidth(50);
+		
+		playerViews.add(playerView);
+    	
+    	HBox row = (HBox)root.getChildren().get(y);
+    	StackPane coordinate = (StackPane) row.getChildren().get(x);
+    	
+    	Image spaceImage = new Image("file:Space.png");
+    	
+    	ImageView spaceImageView = new ImageView(spaceImage);
+		spaceImageView.setFitHeight(50);
+		spaceImageView.setFitWidth(50);
+    	
+    	coordinate.getChildren().setAll(spaceImageView, playerView);
     	
     	// when player on top of space, no need to create space image. only when space is empty
     	// do u need space image, and when player moves, make the previous grid they were on a space

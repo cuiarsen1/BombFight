@@ -22,8 +22,36 @@ public class Main extends Application {
 	protected ArrayList<ImageView> spaceViews;
 	protected ArrayList<ImageView> bombMoreViews;
 	protected ArrayList<ImageView> bombBoostViews;
+	
+	public Map map;
 
 	protected VBox root; // root VBox displaying the main scene
+	
+	public void createMap(String imageFile) {
+		
+		HBox tempBox;
+		
+		for (int i = 0; i < 12; i += 1)
+		{
+			tempBox = new HBox();
+			
+			for (int j = 0; j < 12; j += 1)
+			{
+				StackPane pane = new StackPane();
+				
+				Image tempCrate = new Image(imageFile);
+				ImageView tempCrateView = new ImageView(tempCrate);
+				tempCrateView.setFitHeight(50);
+				tempCrateView.setFitWidth(50);
+				
+				pane.getChildren().add(tempCrateView);
+				
+				tempBox.getChildren().add(pane);
+			}
+			
+			root.getChildren().add(tempBox);
+		}
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -31,22 +59,52 @@ public class Main extends Application {
 		playerList = new ArrayList();
 		bombList = new ArrayList();
 
-		playerViews = new ArrayList();
+		playerViews = new ArrayList<ImageView>();
 		bombViews = new ArrayList();
 		crateViews = new ArrayList();
 		spaceViews = new ArrayList();
 		bombMoreViews = new ArrayList();
 		bombBoostViews = new ArrayList();
-
 		
-		Player player1 = new Player(0, 0, 1);
-  
-		player1.createImage("file:PlayerRed.png");
-		playerList.add(player1);
-  	
 		root = new VBox();
 		
-		root.getChildren().addAll(playerViews);
+		map = new Map();
+		
+		// Initializes playing field
+		createMap("file:Crate.png");
+		
+		//map.createMap();
+
+		Player player1 = new Player(0, 0, 1);
+  
+		//player1.createImage("file:PlayerRed.png");
+		
+		//player1.createImage("PlayerRed.png");
+		
+		
+		ImageView playerView = new ImageView();
+    	
+		Image playerImage = new Image("file:PlayerRed.png");
+		
+		playerView = new ImageView(playerImage);
+		playerView.setFitHeight(50);
+		playerView.setFitWidth(50);
+		
+		playerViews.add(playerView);
+    	
+    	HBox row = (HBox)root.getChildren().get(player1.y);
+    	StackPane coordinate = (StackPane) row.getChildren().get(player1.x);
+    	
+    	Image spaceImage = new Image("file:Space.png");
+    	
+    	ImageView spaceImageView = new ImageView(spaceImage);
+		spaceImageView.setFitHeight(50);
+		spaceImageView.setFitWidth(50);
+    	
+    	coordinate.getChildren().setAll(spaceImageView, playerView);
+		playerList.add(player1);
+  	
+		
 		 
 
 		// TESTING
