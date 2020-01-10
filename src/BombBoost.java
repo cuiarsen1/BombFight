@@ -8,13 +8,9 @@ public class BombBoost extends Item {
     }
 
     @Override
-    public StackPane createImage(String imageFile) {
-
-    }
-
-    @Override
     public void powerUp(Player player) {
 
     	player.bombBoosts += 1;
     }
+    
 }

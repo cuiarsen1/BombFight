@@ -1,5 +1,5 @@
 public class Pair {
-
+	
     protected int type;
     protected Entity object;
 

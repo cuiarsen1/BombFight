@@ -24,7 +24,6 @@ public class Player extends Entity {
     }
     
     // Method used to create a StackPane of the Player image
-    @Override
  	public StackPane createImage(String playerFile) {
  		
  		StackPane pane = new StackPane();
@@ -43,9 +42,5 @@ public class Player extends Entity {
  		
  		return pane;
  	}
-    	
-    	// make all indexes a stackpane, whether or not there is anything to stack so you know it 
-    	// is always a stackpane so you can add cast to stackpane
-    	
-    
+ 	
 }

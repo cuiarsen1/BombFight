@@ -6,9 +6,7 @@ public abstract class Item extends Entity {
     {
         super(x, y);
     }
-
-    public abstract StackPane createImage(String imageFile);
-
+    
     public abstract void powerUp(Player player);
 
 

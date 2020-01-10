@@ -44,8 +44,13 @@ public class Main extends Application {
 			
 			for (int j = 0; j < 12; j += 1)
 			{
+				Crate crate = new Crate(j, i);
+				
 				StackPane pane = createImage("file:Crate.png");
 				tempBox.getChildren().add(pane);
+				
+				Pair pair = new Pair(1, crate);
+				map.mapArray[j][i] = pair;
 			}
 			
 			root.getChildren().add(tempBox);
@@ -53,20 +58,30 @@ public class Main extends Application {
 		
 		// Initializes rows 6 to 7
 		
-		for (int i = 0; i < 2; i += 1)
+		for (int i = 5; i < 6; i += 1)
 		{
 			HBox tempBox = new HBox();
 			
 			for (int j = 0; j < 2; j += 1)
 			{
+				Space space = new Space(j, i);
+				
 				StackPane pane = createImage("file:Space.png");
 				tempBox.getChildren().add(pane);
+				
+				Pair pair = new Pair(0, space);
+				map.mapArray[j][i] = pair;
 			}
 			
-			for (int j = 0; j < 8; j += 1)
+			for (int j = 2; j < 10; j += 1)
 			{
+				Crate crate = new Crate(j, i);
+				
 				StackPane pane = createImage("file:Crate.png");
 				tempBox.getChildren().add(pane);
+				
+				Pair pair = new Pair(1, crate);
+				map.mapArray[j][i] = pair;
 			}
 			
 			for (int j = 0; j < 2; j += 1)
@@ -113,7 +128,10 @@ public class Main extends Application {
 			coordinate = player.createImage("file:PlayerBlue.png");
 		}
     	
-    	HBox row = (HBox)root.getChildren().get(player.y);
+		/*Adds the player to the specific coordinate specified 
+		by using the column and row to pinpoint the location*/
+    	
+		HBox row = (HBox)root.getChildren().get(player.y);
     	row.getChildren().set(player.x, coordinate);
     	
 		playerList.add(player);
