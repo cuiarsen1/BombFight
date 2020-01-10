@@ -1,5 +1,3 @@
-import javafx.scene.layout.StackPane;
-
 public abstract class Entity {
 
     protected int x;
@@ -26,6 +24,4 @@ public abstract class Entity {
     public void setY(int y) {
         this.y = y;
     }
-
-    // public abstract StackPane createImage(String imageFile);
 }

@@ -1,5 +1,3 @@
-import javafx.scene.layout.StackPane;
-
 public abstract class Item extends Entity {
 
     public Item(int x, int y)
@@ -8,6 +6,4 @@ public abstract class Item extends Entity {
     }
     
     public abstract void powerUp(Player player);
-
-
 }

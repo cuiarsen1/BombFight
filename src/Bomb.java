@@ -10,7 +10,7 @@ public class Bomb extends Entity {
     }
     
     // Method used to create a StackPane of the Bomb image
-    public StackPane createImage(String bombFile) {
+    public StackPane createImage(String bombFile, String playerFile) {
     	
     	StackPane pane = new StackPane();
  		
@@ -24,7 +24,12 @@ public class Bomb extends Entity {
  		bombView.setFitHeight(50);
  		bombView.setFitWidth(50);
  		
- 		pane.getChildren().addAll(tempImageView, bombView);
+ 		Image playerImage = new Image(playerFile);
+ 		ImageView playerView = new ImageView(playerImage);
+ 		playerView.setFitHeight(50);
+ 		playerView.setFitWidth(50);
+ 		
+ 		pane.getChildren().addAll(tempImageView, bombView, playerView);
  		
  		return pane;
     }
