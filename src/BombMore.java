@@ -1,5 +1,6 @@
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
 public class BombMore extends Item {
 
@@ -9,13 +10,11 @@ public class BombMore extends Item {
     }
 
     @Override
-    public void createImage(String imageFile) {
+    public StackPane createImage(String imageFile) {
     	
     	Image bombMoreImage = new Image("BombMore.png");
 		
 		ImageView bombMoreView = new ImageView(bombMoreImage);
-		
-		bombMoreViews.add(bombMoreView);
     }
 
     @Override

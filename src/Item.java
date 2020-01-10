@@ -1,3 +1,5 @@
+import javafx.scene.layout.StackPane;
+
 public abstract class Item extends Entity {
 
     public Item(int x, int y)
@@ -5,7 +7,7 @@ public abstract class Item extends Entity {
         super(x, y);
     }
 
-    public abstract void createImage(String imageFile);
+    public abstract StackPane createImage(String imageFile);
 
     public abstract void powerUp(Player player);
 

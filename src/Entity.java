@@ -1,4 +1,4 @@
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
 public abstract class Entity extends Main {
 
@@ -27,7 +27,7 @@ public abstract class Entity extends Main {
         this.y = y;
     }
 
-    public abstract void createImage(String imageFile);
+    public abstract StackPane createImage(String imageFile);
 
 
 

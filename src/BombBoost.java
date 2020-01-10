@@ -1,3 +1,5 @@
+import javafx.scene.layout.StackPane;
+
 public class BombBoost extends Item {
 
     public BombBoost(int x, int y)
@@ -6,7 +8,7 @@ public class BombBoost extends Item {
     }
 
     @Override
-    public void createImage(String imageFile) {
+    public StackPane createImage(String imageFile) {
 
     }
 

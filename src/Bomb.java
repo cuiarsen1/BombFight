@@ -1,3 +1,5 @@
+import javafx.scene.layout.StackPane;
+
 public class Bomb extends Entity {
 	
     public Bomb(int x, int y)
@@ -6,7 +8,7 @@ public class Bomb extends Entity {
     }
 
     @Override
-    public void createImage(String imageFile) {
+    public StackPane createImage(String imageFile) {
     	
     }
 }
