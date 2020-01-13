@@ -1,3 +1,4 @@
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -23,6 +24,8 @@ public class Main extends Application {
 	
 	protected Player player1;
 	protected Player player2;
+	
+	AnimationTimer Timer;
 	
 	/*Method used to create a StackPane of any object other than the Player 
 	(Space, Crate, BombMore, BombBoost)*/
@@ -203,44 +206,91 @@ public class Main extends Application {
 					Pair pair = new Pair(2, player1);
 					map.mapArray[player1.getX()][player1.getY()] = pair;
 					
+					Pair pair2 = new Pair(0, null);
+					map.mapArray[player1.getX()][tempY] = pair2;
+				}
+				
+				else if (event.getCode() == KeyCode.DOWN)
+				{
+					int tempY = player1.getY();
+					player1.setY(tempY + 1);
+					
+					StackPane playerView = player1.createImage("file:PlayerRed.png");
+					
+					HBox row = (HBox)root.getChildren().get(player1.getY());
+			    	row.getChildren().set(player1.getX(), playerView);
+			    	
+					Pair pair = new Pair(2, player1);
+					map.mapArray[player1.getX()][player1.getY()] = pair;
+					
+					Pair pair2 = new Pair(0, null);
+					map.mapArray[player1.getX()][tempY] = pair2;
 				}
 					
-
-				else if (event.getCode() == KeyCode.DOWN)
-					player1
-
 				else if (event.getCode() == KeyCode.RIGHT)
-					player1
-
+				{
+					int tempX = player1.getX();
+					player1.setX(tempX + 1);
+					
+					StackPane playerView = player1.createImage("file:PlayerRed.png");
+					
+					HBox row = (HBox)root.getChildren().get(player1.getY());
+			    	row.getChildren().set(player1.getX(), playerView);
+			    	
+					Pair pair = new Pair(2, player1);
+					map.mapArray[player1.getX()][player1.getY()] = pair;
+					
+					Pair pair2 = new Pair(0, null);
+					map.mapArray[tempX][player1.getY()] = pair2;
+				}
+				
 				else if (event.getCode() == KeyCode.LEFT)
-					player1
-
+				{
+					int tempX = player1.getX();
+					player1.setX(tempX - 1);
+					
+					StackPane playerView = player1.createImage("file:PlayerRed.png");
+					
+					HBox row = (HBox)root.getChildren().get(player1.getY());
+			    	row.getChildren().set(player1.getX(), playerView);
+			    	
+					Pair pair = new Pair(2, player1);
+					map.mapArray[player1.getX()][player1.getY()] = pair;
+					
+					Pair pair2 = new Pair(0, null);
+					map.mapArray[tempX][player1.getY()] = pair2;
+				}
 			}
 		});
+		
+		// Animation timer used to animate the game
+		Timer = new AnimationTimer() {
 
-		// If the arrow keys are released, stop moving the player
-		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			// Variables used to track the time
+			
+			long oldTimeVelocity = 0;
+			long intervalVelocity = 500000000l;
+
 			@Override
-			public void handle(KeyEvent event) {
+			public void handle(long time) {
+				
+				// Animates all the objects every frame CHANGE THIS OBVIOUSLY
+				try {
+					upDateMove();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 
-				// If there is no player on the screen, don't do anything
-				if (players.isEmpty())
-					return;
+				oldTimeVelocity += 1;
 
-				if (event.getCode() == KeyCode.UP)
-					players.get(0).setVelocity_y(0);
-
-				else if (event.getCode() == KeyCode.DOWN)
-					players.get(0).setVelocity_y(0);
-
-				else if (event.getCode() == KeyCode.RIGHT)
-					players.get(0).setVelocity_x(0);
-
-				else if (event.getCode() == KeyCode.LEFT)
-					players.get(0).setVelocity_x(0);
+				// Move the player every half a second if direction key held down
+				if (time - oldTimeVelocity > intervalVelocity) {
+					upDateVelocity();
+					oldTimeVelocity = time;
+				}
 
 			}
-		});
+		};
 
 		primaryStage.setTitle("Bomb Fight");
 		primaryStage.setScene(scene);
