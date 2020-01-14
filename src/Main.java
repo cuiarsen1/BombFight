@@ -309,61 +309,63 @@ public class Main extends Application {
 
 				// Handles movement for Player 1
 				
-				if (event.getCode() == KeyCode.UP)
+				if (event.getCode() == KeyCode.W)
 				{
-					moveBoolean1 = true;
-					moveDirection1 = 1;
+					if (map.mapArray[playerList.get(0).getX()][playerList.get(0).getY() - 1].type != 1)
+					{
+						moveBoolean1 = true;
+						moveDirection1 = 1;
+					}	
 				}
 				
-				else if (event.getCode() == KeyCode.DOWN)
+				else if (event.getCode() == KeyCode.S)
 				{
-					moveBoolean1 = true;
-					moveDirection1 = 2;
+					if (map.mapArray[playerList.get(0).getX()][playerList.get(0).getY() + 1].type != 1)
+					{
+						moveBoolean1 = true;
+						moveDirection1 = 2;
+					}	
 				}
 					
-				else if (event.getCode() == KeyCode.RIGHT)
+				else if (event.getCode() == KeyCode.D)
 				{
-					moveBoolean1 = true;
-					moveDirection1 = 3;
+					if (map.mapArray[playerList.get(0).getX() + 1][playerList.get(0).getY()].type != 1)
+					{
+						moveBoolean1 = true;
+						moveDirection1 = 3;
+					}	
 				}
 				
-				else if (event.getCode() == KeyCode.LEFT)
+				else if (event.getCode() == KeyCode.A)
 				{
-					moveBoolean1 = true;
-					moveDirection1 = 4;
+					if (map.mapArray[playerList.get(0).getX() - 1][playerList.get(0).getY()].type != 1)
+					{
+						moveBoolean1 = true;
+						moveDirection1 = 4;
+					}	
 				}
-			}
-		});
-		
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-
-				// If there is no player on the screen, don't do anything
-				if (playerList.isEmpty())
-					return;
 				
 				// Handles movement for Player 2
 				
-				if (event.getCode() == KeyCode.W)
+				if (event.getCode() == KeyCode.UP)
 				{
 					moveBoolean2 = true;
 					moveDirection2 = 1;
 				}
 				
-				else if (event.getCode() == KeyCode.S)
+				else if (event.getCode() == KeyCode.DOWN)
 				{
 					moveBoolean2 = true;
 					moveDirection2 = 2;
 				}
 					
-				else if (event.getCode() == KeyCode.D)
+				else if (event.getCode() == KeyCode.RIGHT)
 				{
 					moveBoolean2 = true;
 					moveDirection2 = 3;
 				}
 				
-				else if (event.getCode() == KeyCode.A)
+				else if (event.getCode() == KeyCode.LEFT)
 				{
 					moveBoolean2 = true;
 					moveDirection2 = 4;
@@ -381,46 +383,58 @@ public class Main extends Application {
 
 				// Handles stopping movement for Player 1
 				
-				if (event.getCode() == KeyCode.UP)
-					moveBoolean1 = false;
-
-				else if (event.getCode() == KeyCode.DOWN)
-					moveBoolean1 = false;
-
-				else if (event.getCode() == KeyCode.RIGHT)
-					moveBoolean1 = false;
-
-				else if (event.getCode() == KeyCode.LEFT)
-					moveBoolean1 = false;
-
-			}
-		});
-		
-		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-
-				// If there is no player on the screen, don't do anything
-				if (playerList.isEmpty())
-					return;
-
-				// Handles stopping movement for Player 2
-				
 				if (event.getCode() == KeyCode.W)
-					moveBoolean2 = false;
-
+				{
+					if (moveBoolean1 == true)
+						moveBoolean1 = false;
+				}
+					
 				else if (event.getCode() == KeyCode.S)
-					moveBoolean2 = false;
+				{
+					if (moveBoolean1 == true)
+						moveBoolean1 = false;
+				}
+					
 
 				else if (event.getCode() == KeyCode.D)
-					moveBoolean2 = false;
+				{
+					if (moveBoolean1 == true)
+						moveBoolean1 = false;
+				}
 
 				else if (event.getCode() == KeyCode.A)
-					moveBoolean2 = false;
+				{
+					if (moveBoolean1 == true)
+						moveBoolean1 = false;
+				}			
+				// Handles stopping movement for Player 2
+				
+				if (event.getCode() == KeyCode.UP)
+				{
+					if (moveBoolean2 == true)
+						moveBoolean2 = false;
+				}			
+
+				else if (event.getCode() == KeyCode.DOWN)
+				{
+					if (moveBoolean2 == true)
+						moveBoolean2 = false;
+				}			
+
+				else if (event.getCode() == KeyCode.RIGHT)
+				{
+					if (moveBoolean2 == true)
+						moveBoolean2 = false;
+				}			
+
+				else if (event.getCode() == KeyCode.LEFT)
+				{
+					if (moveBoolean2 == true)
+						moveBoolean2 = false;
+				}			
 
 			}
 		});
-
 		
 		// Animation timer used to animate the game
 		Timer = new AnimationTimer() {
@@ -428,7 +442,8 @@ public class Main extends Application {
 			// Variables used to track the time
 			
 			long oldTimeVelocity = 0;
-			long intervalVelocity = 300000000;
+			//long intervalVelocity = 300000000;
+			long intervalVelocity = 250000000;
 
 			@Override
 			public void handle(long time) {
