@@ -109,7 +109,7 @@ public class Main extends Application {
 		
 		//Initializes rows 8 to 12
 		
-		for (int i = 0; i < 5; i += 1)
+		for (int i = 7; i < 12; i += 1)
 		{
 			HBox tempBox = new HBox();
 			
@@ -215,9 +215,6 @@ public class Main extends Application {
 	    	
 			Pair pair = new Pair(2, playerList.get(playerNum - 1));
 			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
-			
-			Pair pair2 = new Pair(0, null);
-			map.mapArray[playerList.get(playerNum - 1).getX()][tempY] = pair2;
 		}
 		
 		else if (direction == 2)
@@ -234,9 +231,6 @@ public class Main extends Application {
 	    	
 			Pair pair = new Pair(2, playerList.get(playerNum - 1));
 			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
-			
-			Pair pair2 = new Pair(0, null);
-			map.mapArray[playerList.get(playerNum - 1).getX()][tempY] = pair2;
 		}
 
 		else if (direction == 3)
@@ -253,9 +247,6 @@ public class Main extends Application {
 	    	
 			Pair pair = new Pair(2, playerList.get(playerNum - 1));
 			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
-			
-			Pair pair2 = new Pair(0, null);
-			map.mapArray[tempX][playerList.get(playerNum - 1).getY()] = pair2;
 		}
 		
 		else if (direction == 4)
@@ -272,9 +263,6 @@ public class Main extends Application {
 	    	
 			Pair pair = new Pair(2, playerList.get(playerNum - 1));
 			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
-			
-			Pair pair2 = new Pair(0, null);
-			map.mapArray[tempX][playerList.get(playerNum - 1).getY()] = pair2;
 		}
 		
 	}
@@ -300,49 +288,79 @@ public class Main extends Application {
 		Scene scene = new Scene(root, 600, 600);
 		
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			
 			@Override
 			public void handle(KeyEvent event) {
-
+	
 				// If there is no player on the screen, don't do anything
 				if (playerList.isEmpty())
 					return;
-
+	
 				// Handles movement for Player 1
 				
 				if (event.getCode() == KeyCode.W)
 				{
-					if (map.mapArray[playerList.get(0).getX()][playerList.get(0).getY() - 1].type != 1)
+					if (playerList.get(0).getY() - 1 >= 0)
 					{
-						moveBoolean1 = true;
-						moveDirection1 = 1;
-					}	
+						if (map.mapArray[playerList.get(0).getX()][playerList.get(0).getY() - 1].type != 1)
+						{
+							moveBoolean1 = true;
+							moveDirection1 = 1;
+						}
+						else
+							moveBoolean1 = false;
+					}
+					else                                                                                     
+						moveBoolean1 = false;
+					
 				}
 				
 				else if (event.getCode() == KeyCode.S)
 				{
-					if (map.mapArray[playerList.get(0).getX()][playerList.get(0).getY() + 1].type != 1)
+					if (playerList.get(0).getY() + 1 <= map.mapArray.length - 1)
 					{
-						moveBoolean1 = true;
-						moveDirection1 = 2;
-					}	
+						if (map.mapArray[playerList.get(0).getX()][playerList.get(0).getY() + 1].type != 1)
+						{
+							moveBoolean1 = true;
+							moveDirection1 = 2;
+						}
+						else
+							moveBoolean1 = false;
+					}
+					else
+						moveBoolean1 = false;
 				}
 					
 				else if (event.getCode() == KeyCode.D)
 				{
-					if (map.mapArray[playerList.get(0).getX() + 1][playerList.get(0).getY()].type != 1)
+					if (playerList.get(0).getX() + 1 <= map.mapArray.length - 1)
 					{
-						moveBoolean1 = true;
-						moveDirection1 = 3;
-					}	
+						if (map.mapArray[playerList.get(0).getX() + 1][playerList.get(0).getY()].type != 1)
+						{
+							moveBoolean1 = true;
+							moveDirection1 = 3;
+						}
+						else
+							moveBoolean1 = false;
+					}
+					else
+						moveBoolean1 = false;
 				}
 				
 				else if (event.getCode() == KeyCode.A)
 				{
-					if (map.mapArray[playerList.get(0).getX() - 1][playerList.get(0).getY()].type != 1)
+					if (playerList.get(0).getX() - 1 >= 0)
 					{
-						moveBoolean1 = true;
-						moveDirection1 = 4;
-					}	
+						if (map.mapArray[playerList.get(0).getX() - 1][playerList.get(0).getY()].type != 1)
+						{
+							moveBoolean1 = true;
+							moveDirection1 = 4;
+						}	
+						else
+							moveBoolean1 = false;
+					}
+					else
+						moveBoolean1 = false;
 				}
 				
 				// Handles movement for Player 2
@@ -374,6 +392,7 @@ public class Main extends Application {
 		});
 		
 		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			
 			@Override
 			public void handle(KeyEvent event) {
 
@@ -381,58 +400,33 @@ public class Main extends Application {
 				if (playerList.isEmpty())
 					return;
 
-				// Handles stopping movement for Player 1
+				// Handles stopping movement for the players
 				
 				if (event.getCode() == KeyCode.W)
-				{
-					if (moveBoolean1 == true)
-						moveBoolean1 = false;
-				}
+					moveBoolean1 = false;
 					
 				else if (event.getCode() == KeyCode.S)
-				{
-					if (moveBoolean1 == true)
-						moveBoolean1 = false;
-				}
-					
+					moveBoolean1 = false;
 
 				else if (event.getCode() == KeyCode.D)
-				{
-					if (moveBoolean1 == true)
-						moveBoolean1 = false;
-				}
+					moveBoolean1 = false;
 
 				else if (event.getCode() == KeyCode.A)
-				{
-					if (moveBoolean1 == true)
-						moveBoolean1 = false;
-				}			
+					moveBoolean1 = false;
+				
 				// Handles stopping movement for Player 2
 				
 				if (event.getCode() == KeyCode.UP)
-				{
-					if (moveBoolean2 == true)
-						moveBoolean2 = false;
-				}			
+					moveBoolean2 = false;
 
 				else if (event.getCode() == KeyCode.DOWN)
-				{
-					if (moveBoolean2 == true)
-						moveBoolean2 = false;
-				}			
+					moveBoolean2 = false;
 
 				else if (event.getCode() == KeyCode.RIGHT)
-				{
-					if (moveBoolean2 == true)
-						moveBoolean2 = false;
-				}			
+					moveBoolean2 = false;	
 
 				else if (event.getCode() == KeyCode.LEFT)
-				{
-					if (moveBoolean2 == true)
-						moveBoolean2 = false;
-				}			
-
+					moveBoolean2 = false;
 			}
 		});
 		
@@ -442,8 +436,7 @@ public class Main extends Application {
 			// Variables used to track the time
 			
 			long oldTimeVelocity = 0;
-			//long intervalVelocity = 300000000;
-			long intervalVelocity = 250000000;
+			long intervalVelocity = 200000000;
 
 			@Override
 			public void handle(long time) {
@@ -451,7 +444,7 @@ public class Main extends Application {
 				oldTimeVelocity += 1;
 
 				// Move the player every half a second if direction key held down
-				if (time - oldTimeVelocity > intervalVelocity) {
+				if (time - oldTimeVelocity > 1) {
 					try {
 						upDateMove();
 					} catch (IOException e) {
