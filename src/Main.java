@@ -258,6 +258,7 @@ public class Main extends Application {
 		}
 	}
 	
+	// Checks for collisions with the edge of the screen or a crate
 	public void collisionCheck(int playerNum) {
 		
 		if (playerList.isEmpty())
@@ -481,7 +482,6 @@ public class Main extends Application {
 	}
 
 	private void upDate() throws IOException {
-		
 		collisionCheck(1);
 		collisionCheck(2);
 	}
@@ -497,8 +497,7 @@ public class Main extends Application {
 		{
 			movePlayers(2, "file:PlayerBlue.png");
 		}
-
-
+		
 		/*// If the player collides with an obstacle, end the game
 		if (stopGame == true)
 			gameOver();*/
