@@ -26,15 +26,7 @@ public class Main extends Application {
 	protected Player player2;
 	
 	AnimationTimer Timer;
-	
-	// booleans used to track which players need to be moved
-	private boolean moveBoolean1 = false;
-	private boolean moveBoolean2 = false;
-	
-	// Integers used to track the direction each player needs to be moved in
-	private int moveDirection1;
-	private int moveDirection2;
-	
+		
 	/*Method used to create a StackPane of any object other than the Player 
 	(Space, Crate, BombMore, BombBoost)*/
 	public StackPane createImage(String imageFile) {
@@ -196,12 +188,12 @@ public class Main extends Application {
 	
 	// Method used to move players. The integer direction is represented with: 
 	// 1: Up 2: Down 3: Right 4: Left
-	public void movePlayers(int playerNum, int direction, String playerFile) {
+	public void movePlayers(int playerNum, String playerFile) {
 		
 		if (playerList.isEmpty())
 			return;
 		
-		if (direction == 1)
+		if (playerList.get(playerNum - 1).moveDirection == 1)
 		{
 			int tempY = playerList.get(playerNum - 1).getY();
 			playerList.get(playerNum - 1).setY(tempY - 1);
@@ -217,7 +209,7 @@ public class Main extends Application {
 			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
 		}
 		
-		else if (direction == 2)
+		else if (playerList.get(playerNum - 1).moveDirection == 2)
 		{
 			int tempY = playerList.get(playerNum - 1).getY();
 			playerList.get(playerNum - 1).setY(tempY + 1);
@@ -233,7 +225,7 @@ public class Main extends Application {
 			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
 		}
 
-		else if (direction == 3)
+		else if (playerList.get(playerNum - 1).moveDirection == 3)
 		{
 			int tempX = playerList.get(playerNum - 1).getX();
 			playerList.get(playerNum - 1).setX(tempX + 1);
@@ -249,7 +241,7 @@ public class Main extends Application {
 			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
 		}
 		
-		else if (direction == 4)
+		else if (playerList.get(playerNum - 1).moveDirection == 4)
 		{
 			int tempX = playerList.get(playerNum - 1).getX();
 			playerList.get(playerNum - 1).setX(tempX - 1);
@@ -264,7 +256,72 @@ public class Main extends Application {
 			Pair pair = new Pair(2, playerList.get(playerNum - 1));
 			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
 		}
+	}
+	
+	public void collisionCheck(int playerNum) {
 		
+		if (playerList.isEmpty())
+			return;
+		
+		if (playerList.get(playerNum - 1).moveDirection == 1)
+		{
+			if (playerList.get(playerNum - 1).getY() - 1 >= 0)
+			{
+				if (map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY() - 1].type != 1)
+				{
+					playerList.get(playerNum - 1).moveBoolean = true;
+				}
+				else
+					playerList.get(playerNum - 1).moveBoolean = false;
+			}
+			else                                                                                     
+				playerList.get(playerNum - 1).moveBoolean = false;
+		}
+		
+		if (playerList.get(playerNum - 1).moveDirection == 2)
+		{
+			if (playerList.get(playerNum - 1).getY() + 1 <= 11)
+			{
+				if (map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY() + 1].type != 1)
+				{
+					playerList.get(playerNum - 1).moveBoolean = true;
+				}
+				else
+					playerList.get(playerNum - 1).moveBoolean = false;
+			}
+			else                                                                                     
+				playerList.get(playerNum - 1).moveBoolean = false;
+		}
+		
+		if (playerList.get(playerNum - 1).moveDirection == 3)
+		{
+			if (playerList.get(playerNum - 1).getX() + 1 <= 11)
+			{
+				if (map.mapArray[playerList.get(playerNum - 1).getX() + 1][playerList.get(playerNum - 1).getY()].type != 1)
+				{
+					playerList.get(playerNum - 1).moveBoolean = true;
+				}
+				else
+					playerList.get(playerNum - 1).moveBoolean = false;
+			}
+			else                                                                                     
+				playerList.get(playerNum - 1).moveBoolean = false;
+		}
+		
+		if (playerList.get(playerNum - 1).moveDirection == 4)
+		{
+			if (playerList.get(playerNum - 1).getX() - 1 >= 0)
+			{
+				if (map.mapArray[playerList.get(playerNum - 1).getX() - 1][playerList.get(playerNum - 1).getY()].type != 1)
+				{
+					playerList.get(playerNum - 1).moveBoolean = true;
+				}
+				else
+					playerList.get(playerNum - 1).moveBoolean = false;
+			}
+			else                                                                                     
+				playerList.get(playerNum - 1).moveBoolean = false;
+		}
 	}
 	
 	@Override
@@ -300,93 +357,44 @@ public class Main extends Application {
 				
 				if (event.getCode() == KeyCode.W)
 				{
-					if (playerList.get(0).getY() - 1 >= 0)
-					{
-						if (map.mapArray[playerList.get(0).getX()][playerList.get(0).getY() - 1].type != 1)
-						{
-							moveBoolean1 = true;
-							moveDirection1 = 1;
-						}
-						else
-							moveBoolean1 = false;
-					}
-					else                                                                                     
-						moveBoolean1 = false;
-					
+					playerList.get(0).moveDirection = 1;
 				}
 				
 				else if (event.getCode() == KeyCode.S)
 				{
-					if (playerList.get(0).getY() + 1 <= map.mapArray.length - 1)
-					{
-						if (map.mapArray[playerList.get(0).getX()][playerList.get(0).getY() + 1].type != 1)
-						{
-							moveBoolean1 = true;
-							moveDirection1 = 2;
-						}
-						else
-							moveBoolean1 = false;
-					}
-					else
-						moveBoolean1 = false;
+					playerList.get(0).moveDirection = 2;
 				}
 					
 				else if (event.getCode() == KeyCode.D)
 				{
-					if (playerList.get(0).getX() + 1 <= map.mapArray.length - 1)
-					{
-						if (map.mapArray[playerList.get(0).getX() + 1][playerList.get(0).getY()].type != 1)
-						{
-							moveBoolean1 = true;
-							moveDirection1 = 3;
-						}
-						else
-							moveBoolean1 = false;
-					}
-					else
-						moveBoolean1 = false;
+					playerList.get(0).moveDirection = 3;
 				}
 				
 				else if (event.getCode() == KeyCode.A)
 				{
-					if (playerList.get(0).getX() - 1 >= 0)
-					{
-						if (map.mapArray[playerList.get(0).getX() - 1][playerList.get(0).getY()].type != 1)
-						{
-							moveBoolean1 = true;
-							moveDirection1 = 4;
-						}	
-						else
-							moveBoolean1 = false;
-					}
-					else
-						moveBoolean1 = false;
+					playerList.get(0).moveDirection = 4;
 				}
 				
 				// Handles movement for Player 2
 				
 				if (event.getCode() == KeyCode.UP)
 				{
-					moveBoolean2 = true;
-					moveDirection2 = 1;
+					playerList.get(1).moveDirection = 1;
 				}
 				
 				else if (event.getCode() == KeyCode.DOWN)
 				{
-					moveBoolean2 = true;
-					moveDirection2 = 2;
+					playerList.get(1).moveDirection = 2;
 				}
 					
 				else if (event.getCode() == KeyCode.RIGHT)
 				{
-					moveBoolean2 = true;
-					moveDirection2 = 3;
+					playerList.get(1).moveDirection = 3;
 				}
 				
 				else if (event.getCode() == KeyCode.LEFT)
 				{
-					moveBoolean2 = true;
-					moveDirection2 = 4;
+					playerList.get(1).moveDirection = 4;
 				}
 			}
 		});
@@ -403,30 +411,30 @@ public class Main extends Application {
 				// Handles stopping movement for the players
 				
 				if (event.getCode() == KeyCode.W)
-					moveBoolean1 = false;
+					playerList.get(0).moveBoolean = false;
 					
 				else if (event.getCode() == KeyCode.S)
-					moveBoolean1 = false;
+					playerList.get(0).moveBoolean = false;
 
 				else if (event.getCode() == KeyCode.D)
-					moveBoolean1 = false;
+					playerList.get(0).moveBoolean = false;
 
 				else if (event.getCode() == KeyCode.A)
-					moveBoolean1 = false;
+					playerList.get(0).moveBoolean = false;
 				
 				// Handles stopping movement for Player 2
 				
 				if (event.getCode() == KeyCode.UP)
-					moveBoolean2 = false;
+					playerList.get(1).moveBoolean = false;
 
 				else if (event.getCode() == KeyCode.DOWN)
-					moveBoolean2 = false;
+					playerList.get(1).moveBoolean = false;
 
 				else if (event.getCode() == KeyCode.RIGHT)
-					moveBoolean2 = false;	
+					playerList.get(1).moveBoolean = false;
 
 				else if (event.getCode() == KeyCode.LEFT)
-					moveBoolean2 = false;
+					playerList.get(1).moveBoolean = false;
 			}
 		});
 		
@@ -436,15 +444,23 @@ public class Main extends Application {
 			// Variables used to track the time
 			
 			long oldTimeVelocity = 0;
-			long intervalVelocity = 200000000;
+			long intervalVelocity = 100000000;
 
 			@Override
 			public void handle(long time) {
 				
 				oldTimeVelocity += 1;
 
-				// Move the player every half a second if direction key held down
-				if (time - oldTimeVelocity > 1) {
+				// Move the player every fifth of a second if direction key held down
+				
+				try {
+					upDate();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if (time - oldTimeVelocity > intervalVelocity) {
 					try {
 						upDateMove();
 					} catch (IOException e) {
@@ -463,26 +479,31 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
+
+	private void upDate() throws IOException {
+		
+		collisionCheck(1);
+		collisionCheck(2);
+	}
 	
 	private void upDateMove() throws IOException {
 		
-		if (moveBoolean1 == true)
+		if (playerList.get(0).moveBoolean == true)
 		{
-			movePlayers(1, moveDirection1, "file:PlayerRed.png");
+			movePlayers(1, "file:PlayerRed.png");
 		}
 		
-		if (moveBoolean2 == true)
+		if (playerList.get(1).moveBoolean == true)
 		{
-			movePlayers(2, moveDirection2, "file:PlayerBlue.png");
+			movePlayers(2, "file:PlayerBlue.png");
 		}
 
 
 		/*// If the player collides with an obstacle, end the game
 		if (stopGame == true)
 			gameOver();*/
-
 	}
-
+	
 	public static void main(String[] args) throws IOException {
 		launch(args);
 	}

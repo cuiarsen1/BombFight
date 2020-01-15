@@ -11,6 +11,9 @@ public class Player extends Entity {
 	protected int lives;
 	protected int bombBoosts;
 	protected int bombMores;
+	
+	protected boolean moveBoolean;
+	protected int moveDirection;
 
     public Player(int x, int y, int playerNum)
     {
@@ -21,6 +24,8 @@ public class Player extends Entity {
         lives = 3;
         bombBoosts = 0;
         bombMores = 0;
+        
+        moveBoolean = false;
     }
     
     // Method used to create a StackPane of the Player image
