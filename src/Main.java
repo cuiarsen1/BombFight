@@ -11,7 +11,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -157,7 +156,7 @@ public class Main extends Application {
 		Pair pair = new Pair(2, player);
 		map.mapArray[x][y] = pair;
     	
-		playerList.add(player);
+		playerList.add(new Node<Player>(player));
 		
 		return player;
 	}
@@ -193,68 +192,71 @@ public class Main extends Application {
 		if (playerList.isEmpty())
 			return;
 		
-		if (playerList.get(playerNum - 1).moveDirection == 1)
+		if (playerList.get(playerNum - 1).getValue().moveDirection == 1)
 		{
-			int tempY = playerList.get(playerNum - 1).getY();
-			playerList.get(playerNum - 1).setY(tempY - 1);
+			int tempY = playerList.get(playerNum - 1).getValue().getY();
+			playerList.get(playerNum - 1).getValue().setY(tempY - 1);
 			
-			StackPane playerView = playerList.get(playerNum - 1).createImage(playerFile);
+			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
 			
-			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getY());
-	    	row.getChildren().set(playerList.get(playerNum - 1).getX(), playerView);
+			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
+	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
 	    	
-	    	createSpace(playerList.get(playerNum - 1).getX(), tempY);
+	    	if (bomb not created)
+	    		createSpace(playerList.get(playerNum - 1).getValue().getX(), tempY);
+	    	else if (bomb created)
+	    		make bomb image in the space, probably make a new method purely to make bomb image in main class
 	    	
-			Pair pair = new Pair(2, playerList.get(playerNum - 1));
-			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
+			Pair pair = new Pair(2, playerList.get(playerNum - 1).getValue());
+			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = pair;
 		}
 		
-		else if (playerList.get(playerNum - 1).moveDirection == 2)
+		else if (playerList.get(playerNum - 1).getValue().moveDirection == 2)
 		{
-			int tempY = playerList.get(playerNum - 1).getY();
-			playerList.get(playerNum - 1).setY(tempY + 1);
+			int tempY = playerList.get(playerNum - 1).getValue().getY();
+			playerList.get(playerNum - 1).getValue().setY(tempY + 1);
 			
-			StackPane playerView = playerList.get(playerNum - 1).createImage(playerFile);
+			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
 			
-			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getY());
-	    	row.getChildren().set(playerList.get(playerNum - 1).getX(), playerView);
+			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
+	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
 	    	
-	    	createSpace(playerList.get(playerNum - 1).getX(), tempY);
+	    	createSpace(playerList.get(playerNum - 1).getValue().getX(), tempY);
 	    	
-			Pair pair = new Pair(2, playerList.get(playerNum - 1));
-			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
+			Pair pair = new Pair(2, playerList.get(playerNum - 1).getValue());
+			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = pair;
 		}
 
-		else if (playerList.get(playerNum - 1).moveDirection == 3)
+		else if (playerList.get(playerNum - 1).getValue().moveDirection == 3)
 		{
-			int tempX = playerList.get(playerNum - 1).getX();
-			playerList.get(playerNum - 1).setX(tempX + 1);
+			int tempX = playerList.get(playerNum - 1).getValue().getX();
+			playerList.get(playerNum - 1).getValue().setX(tempX + 1);
 			
-			StackPane playerView = playerList.get(playerNum - 1).createImage(playerFile);
+			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
 			
-			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getY());
-	    	row.getChildren().set(playerList.get(playerNum - 1).getX(), playerView);
+			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
+	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
 	    	
-	    	createSpace(tempX, playerList.get(playerNum - 1).getY());
+	    	createSpace(tempX, playerList.get(playerNum - 1).getValue().getY());
 	    	
-			Pair pair = new Pair(2, playerList.get(playerNum - 1));
-			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
+			Pair pair = new Pair(2, playerList.get(playerNum - 1).getValue());
+			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = pair;
 		}
 		
-		else if (playerList.get(playerNum - 1).moveDirection == 4)
+		else if (playerList.get(playerNum - 1).getValue().moveDirection == 4)
 		{
-			int tempX = playerList.get(playerNum - 1).getX();
-			playerList.get(playerNum - 1).setX(tempX - 1);
+			int tempX = playerList.get(playerNum - 1).getValue().getX();
+			playerList.get(playerNum - 1).getValue().setX(tempX - 1);
 			
-			StackPane playerView = playerList.get(playerNum - 1).createImage(playerFile);
+			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
 			
-			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getY());
-	    	row.getChildren().set(playerList.get(playerNum - 1).getX(), playerView);
+			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
+	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
 	    	
-	    	createSpace(tempX, playerList.get(playerNum - 1).getY());
+	    	createSpace(tempX, playerList.get(playerNum - 1).getValue().getY());
 	    	
-			Pair pair = new Pair(2, playerList.get(playerNum - 1));
-			map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY()] = pair;
+			Pair pair = new Pair(2, playerList.get(playerNum - 1).getValue());
+			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = pair;
 		}
 	}
 	
@@ -264,64 +266,64 @@ public class Main extends Application {
 		if (playerList.isEmpty())
 			return;
 		
-		if (playerList.get(playerNum - 1).moveDirection == 1)
+		if (playerList.get(playerNum - 1).getValue().moveDirection == 1)
 		{
-			if (playerList.get(playerNum - 1).getY() - 1 >= 0)
+			if (playerList.get(playerNum - 1).getValue().getY() - 1 >= 0)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY() - 1].type != 1)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() - 1].type != 1)
 				{
-					playerList.get(playerNum - 1).moveBoolean = true;
+					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
 				else
-					playerList.get(playerNum - 1).moveBoolean = false;
+					playerList.get(playerNum - 1).getValue().moveBoolean = false;
 			}
 			else                                                                                     
-				playerList.get(playerNum - 1).moveBoolean = false;
+				playerList.get(playerNum - 1).getValue().moveBoolean = false;
 		}
 		
-		if (playerList.get(playerNum - 1).moveDirection == 2)
+		if (playerList.get(playerNum - 1).getValue().moveDirection == 2)
 		{
-			if (playerList.get(playerNum - 1).getY() + 1 <= 11)
+			if (playerList.get(playerNum - 1).getValue().getY() + 1 <= 11)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getX()][playerList.get(playerNum - 1).getY() + 1].type != 1)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() + 1].type != 1)
 				{
-					playerList.get(playerNum - 1).moveBoolean = true;
+					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
 				else
-					playerList.get(playerNum - 1).moveBoolean = false;
+					playerList.get(playerNum - 1).getValue().moveBoolean = false;
 			}
 			else                                                                                     
-				playerList.get(playerNum - 1).moveBoolean = false;
+				playerList.get(playerNum - 1).getValue().moveBoolean = false;
 		}
 		
-		if (playerList.get(playerNum - 1).moveDirection == 3)
+		if (playerList.get(playerNum - 1).getValue().moveDirection == 3)
 		{
-			if (playerList.get(playerNum - 1).getX() + 1 <= 11)
+			if (playerList.get(playerNum - 1).getValue().getX() + 1 <= 11)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getX() + 1][playerList.get(playerNum - 1).getY()].type != 1)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList.get(playerNum - 1).getValue().getY()].type != 1)
 				{
-					playerList.get(playerNum - 1).moveBoolean = true;
+					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
 				else
-					playerList.get(playerNum - 1).moveBoolean = false;
+					playerList.get(playerNum - 1).getValue().moveBoolean = false;
 			}
 			else                                                                                     
-				playerList.get(playerNum - 1).moveBoolean = false;
+				playerList.get(playerNum - 1).getValue().moveBoolean = false;
 		}
 		
-		if (playerList.get(playerNum - 1).moveDirection == 4)
+		if (playerList.get(playerNum - 1).getValue().moveDirection == 4)
 		{
-			if (playerList.get(playerNum - 1).getX() - 1 >= 0)
+			if (playerList.get(playerNum - 1).getValue().getX() - 1 >= 0)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getX() - 1][playerList.get(playerNum - 1).getY()].type != 1)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList.get(playerNum - 1).getValue().getY()].type != 1)
 				{
-					playerList.get(playerNum - 1).moveBoolean = true;
+					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
 				else
-					playerList.get(playerNum - 1).moveBoolean = false;
+					playerList.get(playerNum - 1).getValue().moveBoolean = false;
 			}
 			else                                                                                     
-				playerList.get(playerNum - 1).moveBoolean = false;
+				playerList.get(playerNum - 1).getValue().moveBoolean = false;
 		}
 	}
 	
@@ -357,46 +359,42 @@ public class Main extends Application {
 				// Handles movement for Player 1
 				
 				if (event.getCode() == KeyCode.W)
-				{
-					playerList.get(0).moveDirection = 1;
-				}
+					playerList.get(0).getValue().moveDirection = 1;
 				
 				else if (event.getCode() == KeyCode.S)
-				{
-					playerList.get(0).moveDirection = 2;
-				}
-					
+					playerList.get(0).getValue().moveDirection = 2;
+				
 				else if (event.getCode() == KeyCode.D)
-				{
-					playerList.get(0).moveDirection = 3;
-				}
+					playerList.get(0).getValue().moveDirection = 3;
 				
 				else if (event.getCode() == KeyCode.A)
-				{
-					playerList.get(0).moveDirection = 4;
-				}
+					playerList.get(0).getValue().moveDirection = 4;
+				
+				
 				
 				// Handles movement for Player 2
 				
 				if (event.getCode() == KeyCode.UP)
 				{
-					playerList.get(1).moveDirection = 1;
+					playerList.get(1).getValue().moveDirection = 1;
 				}
 				
 				else if (event.getCode() == KeyCode.DOWN)
 				{
-					playerList.get(1).moveDirection = 2;
+					playerList.get(1).getValue().moveDirection = 2;
 				}
 					
 				else if (event.getCode() == KeyCode.RIGHT)
 				{
-					playerList.get(1).moveDirection = 3;
+					playerList.get(1).getValue().moveDirection = 3;
 				}
 				
 				else if (event.getCode() == KeyCode.LEFT)
 				{
-					playerList.get(1).moveDirection = 4;
+					playerList.get(1).getValue().moveDirection = 4;
 				}
+				
+				
 			}
 		});
 		
@@ -412,30 +410,40 @@ public class Main extends Application {
 				// Handles stopping movement for the players
 				
 				if (event.getCode() == KeyCode.W)
-					playerList.get(0).moveBoolean = false;
+					playerList.get(0).getValue().moveBoolean = false;
 					
 				else if (event.getCode() == KeyCode.S)
-					playerList.get(0).moveBoolean = false;
+					playerList.get(0).getValue().moveBoolean = false;
 
 				else if (event.getCode() == KeyCode.D)
-					playerList.get(0).moveBoolean = false;
+					playerList.get(0).getValue().moveBoolean = false;
 
 				else if (event.getCode() == KeyCode.A)
-					playerList.get(0).moveBoolean = false;
+					playerList.get(0).getValue().moveBoolean = false;
+				
+				if (event.getCode() == KeyCode.C)
+				{
+					Bomb bomb = createBomb(playerList.get(0).getValue());
+				}
 				
 				// Handles stopping movement for Player 2
 				
 				if (event.getCode() == KeyCode.UP)
-					playerList.get(1).moveBoolean = false;
+					playerList.get(1).getValue().moveBoolean = false;
 
 				else if (event.getCode() == KeyCode.DOWN)
-					playerList.get(1).moveBoolean = false;
+					playerList.get(1).getValue().moveBoolean = false;
 
 				else if (event.getCode() == KeyCode.RIGHT)
-					playerList.get(1).moveBoolean = false;
-
+					playerList.get(1).getValue().moveBoolean = false;
+				
 				else if (event.getCode() == KeyCode.LEFT)
-					playerList.get(1).moveBoolean = false;
+					playerList.get(1).getValue().moveBoolean = false;
+				
+				if (event.getCode() == KeyCode.SLASH)
+				{
+					Bomb bomb = createBomb(playerList.get(1).getValue());
+				}
 			}
 		});
 		
@@ -446,7 +454,7 @@ public class Main extends Application {
 			
 			long oldTimeVelocity = 0;
 			long intervalVelocity = 100000000;
-
+			
 			@Override
 			public void handle(long time) {
 				
@@ -488,12 +496,12 @@ public class Main extends Application {
 	
 	private void upDateMove() throws IOException {
 		
-		if (playerList.get(0).moveBoolean == true)
+		if (playerList.get(0).getValue().moveBoolean == true)
 		{
 			movePlayers(1, "file:PlayerRed.png");
 		}
 		
-		if (playerList.get(1).moveBoolean == true)
+		if (playerList.get(1).getValue().moveBoolean == true)
 		{
 			movePlayers(2, "file:PlayerBlue.png");
 		}

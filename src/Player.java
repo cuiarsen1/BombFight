@@ -6,14 +6,14 @@ import javafx.scene.layout.StackPane;
 
 public class Player extends Entity {
 	
-	protected int playerNum;
+	protected int playerNum; // integer representing the number of the player
 	
-	protected int lives;
-	protected int bombBoosts;
-	protected int bombMores;
+	protected int lives; // stores the number of lives the player has
+	protected int bombBoosts; // stores the number of Bomb Boosts the player picked up
+	protected int bombMores; // stores the number of Bomb Mores the player picked up
 	
-	protected boolean moveBoolean;
-	protected int moveDirection;
+	protected boolean moveBoolean; // boolean tracking whether the player is able to move 
+	protected int moveDirection; // represents the direction the player is currently moving in
 
     public Player(int x, int y, int playerNum)
     {
