@@ -243,12 +243,25 @@ public class Main extends Application {
 			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
 	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
 	    	
-	    	if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY] == 0)
+	    	if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY].type == 0 || map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY].type == 6)
+	    	{
 	    		createSpace(playerList.get(playerNum - 1).getValue().getX(), tempY);
-	    	else if (bomb created)
-	    		make bomb image in the space, probably make a new method purely to make bomb image in main class
+	    		Pair pair = new Pair(0, null);
+		    	map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY] = pair;
+	    	}
+	    	
+	    	else if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY].type == 3)
+	    	{
+	    		StackPane bombImage = createImage(2, "file:Bomb.png");
+	    		HBox rowTemp = (HBox)root.getChildren().get(tempY);
+		    	rowTemp.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), bombImage);
+		    	
+		    	// Changes the type of object in the previous grid to bomb, doesn't matter which bomb it is
+		    	Pair pair = new Pair(3, null);
+		    	map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY] = pair;
+	    	}
 	    		
-	    	FIND OUT HOW TO FIX EDGE CASES WHERE PLAYER LEAVES FROM A BLOCK THAT CONTAINS A BOMB
+	    	FIGURE OUT WHY A PLAYER GETS CREATED IN PREVIOUS GRID	
 	    	
 			Pair pair = new Pair(2, playerList.get(playerNum - 1).getValue());
 			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = pair;
@@ -313,7 +326,7 @@ public class Main extends Application {
 		{
 			if (playerList.get(playerNum - 1).getValue().getY() - 1 >= 0)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() - 1].type != 1)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() - 1].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() - 1].type != 2)
 				{
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
@@ -328,7 +341,7 @@ public class Main extends Application {
 		{
 			if (playerList.get(playerNum - 1).getValue().getY() + 1 <= 11)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() + 1].type != 1)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() + 1].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() + 1].type != 2)
 				{
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
@@ -343,7 +356,7 @@ public class Main extends Application {
 		{
 			if (playerList.get(playerNum - 1).getValue().getX() + 1 <= 11)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList.get(playerNum - 1).getValue().getY()].type != 1)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList.get(playerNum - 1).getValue().getY()].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList.get(playerNum - 1).getValue().getY()].type != 2)
 				{
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
@@ -358,7 +371,7 @@ public class Main extends Application {
 		{
 			if (playerList.get(playerNum - 1).getValue().getX() - 1 >= 0)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList.get(playerNum - 1).getValue().getY()].type != 1)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList.get(playerNum - 1).getValue().getY()].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList.get(playerNum - 1).getValue().getY()].type != 2)
 				{
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
