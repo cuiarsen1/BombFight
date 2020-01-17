@@ -28,15 +28,56 @@ public class Main extends Application {
 		
 	/*Method used to create a StackPane of any object other than the Player 
 	(Space, Crate, BombMore, BombBoost)*/
-	public StackPane createImage(String imageFile) {
+	public StackPane createImage(int numImages, String imageFile) {
 		
 		StackPane pane = new StackPane();
-		Image tempImage = new Image(imageFile);
-		ImageView tempImageView = new ImageView(tempImage);
-		tempImageView.setFitHeight(50);
-		tempImageView.setFitWidth(50);
 		
-		pane.getChildren().add(tempImageView);
+		if (numImages == 1)
+		{
+			Image tempImage = new Image(imageFile);
+			ImageView tempImageView = new ImageView(tempImage);
+			tempImageView.setFitHeight(50);
+			tempImageView.setFitWidth(50);
+			
+			pane.getChildren().add(tempImageView);
+		}
+		
+		else if (numImages == 2)
+		{
+			Image spaceImage = new Image("file:Space.png");
+			ImageView spaceImageView = new ImageView(spaceImage);
+			spaceImageView.setFitHeight(50);
+			spaceImageView.setFitWidth(50);
+			
+			Image tempImage = new Image(imageFile);
+			ImageView tempImageView = new ImageView(tempImage);
+			tempImageView.setFitHeight(50);
+			tempImageView.setFitWidth(50);
+			
+			pane.getChildren().addAll(spaceImageView, tempImageView);
+		}
+		
+		// Creates images for the case that the player is moving out of a grid that 
+		// contains both the other player and a bomb
+		else if (numImages == 3) {
+			
+			Image spaceImage = new Image("file:Space.png");
+			ImageView spaceImageView = new ImageView(spaceImage);
+			spaceImageView.setFitHeight(50);
+			spaceImageView.setFitWidth(50);
+			
+			Image bombImage = new Image("file:Bomb.png");
+			ImageView bombImageView = new ImageView(bombImage);
+			bombImageView.setFitHeight(50);
+			bombImageView.setFitWidth(50);
+			
+			Image playerImage = new Image(imageFile);
+			ImageView playerImageView = new ImageView(playerImage);
+			playerImageView.setFitHeight(50);
+			playerImageView.setFitWidth(50);
+			
+			pane.getChildren().addAll(spaceImageView, bombImageView, playerImageView);
+		}
 		
 		return pane;
 	}
@@ -52,7 +93,7 @@ public class Main extends Application {
 			
 			for (int j = 0; j < 12; j += 1)
 			{	
-				StackPane pane = createImage("file:Crate.png");
+				StackPane pane = createImage(1, "file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
 				Pair pair = new Pair(1, null);
@@ -70,7 +111,7 @@ public class Main extends Application {
 			
 			for (int j = 0; j < 2; j += 1)
 			{
-				StackPane pane = createImage("file:Space.png");
+				StackPane pane = createImage(1, "file:Space.png");
 				tempBox.getChildren().add(pane);
 				
 				Pair pair = new Pair(0, null);
@@ -79,7 +120,7 @@ public class Main extends Application {
 			
 			for (int j = 2; j < 10; j += 1)
 			{
-				StackPane pane = createImage("file:Crate.png");
+				StackPane pane = createImage(1, "file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
 				Pair pair = new Pair(1, null);
@@ -88,7 +129,7 @@ public class Main extends Application {
 			
 			for (int j = 10; j < 12; j += 1)
 			{
-				StackPane pane = createImage("file:Space.png");
+				StackPane pane = createImage(1, "file:Space.png");
 				tempBox.getChildren().add(pane);
 				
 				Pair pair = new Pair(0, null);
@@ -106,7 +147,7 @@ public class Main extends Application {
 			
 			for (int j = 0; j < 12; j += 1)
 			{
-				StackPane pane = createImage("file:Crate.png");
+				StackPane pane = createImage(1, "file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
 				Pair pair = new Pair(1, null);
@@ -119,7 +160,7 @@ public class Main extends Application {
 	
 	public void createSpace(int x, int y) {
 		
-		StackPane spaceImage = createImage("file:Space.png");
+		StackPane spaceImage = createImage(1, "file:Space.png");
 		
 		HBox row = (HBox)root.getChildren().get(y);
     	row.getChildren().set(x, spaceImage);
@@ -202,10 +243,12 @@ public class Main extends Application {
 			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
 	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
 	    	
-	    	if (bomb not created)
+	    	if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY] == 0)
 	    		createSpace(playerList.get(playerNum - 1).getValue().getX(), tempY);
 	    	else if (bomb created)
 	    		make bomb image in the space, probably make a new method purely to make bomb image in main class
+	    		
+	    	FIND OUT HOW TO FIX EDGE CASES WHERE PLAYER LEAVES FROM A BLOCK THAT CONTAINS A BOMB
 	    	
 			Pair pair = new Pair(2, playerList.get(playerNum - 1).getValue());
 			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = pair;
