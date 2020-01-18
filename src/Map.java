@@ -1,10 +1,10 @@
 public class Map {
 	
-	protected Pair[][] mapArray;
+	protected Triple[][] mapArray;
 	
 	public Map()
 	{
-		mapArray = new Pair[12][12];
+		mapArray = new Triple[12][12];
 	}
 
 }

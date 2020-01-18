@@ -96,8 +96,8 @@ public class Main extends Application {
 				StackPane pane = createImage(1, "file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
-				Pair pair = new Pair(1, null);
-				map.mapArray[j][i] = pair;
+				Triple triple = new Triple(1, null, false);
+				map.mapArray[j][i] = triple;
 			}
 			
 			root.getChildren().add(tempBox);
@@ -114,8 +114,8 @@ public class Main extends Application {
 				StackPane pane = createImage(1, "file:Space.png");
 				tempBox.getChildren().add(pane);
 				
-				Pair pair = new Pair(0, null);
-				map.mapArray[j][i] = pair;
+				Triple triple = new Triple(0, null, false);
+				map.mapArray[j][i] = triple;
 			}
 			
 			for (int j = 2; j < 10; j += 1)
@@ -123,8 +123,8 @@ public class Main extends Application {
 				StackPane pane = createImage(1, "file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
-				Pair pair = new Pair(1, null);
-				map.mapArray[j][i] = pair;
+				Triple triple = new Triple(1, null, false);
+				map.mapArray[j][i] = triple;
 			}
 			
 			for (int j = 10; j < 12; j += 1)
@@ -132,8 +132,8 @@ public class Main extends Application {
 				StackPane pane = createImage(1, "file:Space.png");
 				tempBox.getChildren().add(pane);
 				
-				Pair pair = new Pair(0, null);
-				map.mapArray[j][i] = pair;
+				Triple triple = new Triple(0, null, false);
+				map.mapArray[j][i] = triple;
 			}
 			
 			root.getChildren().add(tempBox);
@@ -150,8 +150,8 @@ public class Main extends Application {
 				StackPane pane = createImage(1, "file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
-				Pair pair = new Pair(1, null);
-				map.mapArray[j][i] = pair;
+				Triple triple = new Triple(1, null, false);
+				map.mapArray[j][i] = triple;
 			}
 			
 			root.getChildren().add(tempBox);
@@ -165,8 +165,8 @@ public class Main extends Application {
 		HBox row = (HBox)root.getChildren().get(y);
     	row.getChildren().set(x, spaceImage);
     	
-		Pair pair = new Pair(0, null);
-		map.mapArray[x][y] = pair;
+		Triple triple = new Triple(0, null, false);
+		map.mapArray[x][y] = triple;
 	}
 	
 	// Creates and initializes the player on the field
@@ -194,8 +194,8 @@ public class Main extends Application {
 		HBox row = (HBox)root.getChildren().get(y);
     	row.getChildren().set(x, playerImage);
     	
-		Pair pair = new Pair(2, player);
-		map.mapArray[x][y] = pair;
+		Triple triple = new Triple(2, player, false);
+		map.mapArray[x][y] = triple;
     	
 		playerList.add(new Node<Player>(player));
 		
@@ -204,7 +204,7 @@ public class Main extends Application {
 	
 	public Bomb createBomb(Player player) {
 		
-		Bomb bomb = new Bomb(0, 0);
+		Bomb bomb = new Bomb(player.getX(), player.getY()); // Initialize bomb 
 		StackPane bombImage = null;
 		
 		if (player.playerNum == 1)
@@ -220,8 +220,8 @@ public class Main extends Application {
 		HBox row = (HBox)root.getChildren().get(player.getY());
     	row.getChildren().set(player.getX(), bombImage);
     	
-		Pair pair = new Pair(3, bomb);
-		map.mapArray[player.getX()][player.getY()] = pair;
+		Triple triple = new Triple(3, bomb, true);
+		map.mapArray[player.getX()][player.getY()] = triple;
 		
 		return bomb;
 	}
@@ -233,90 +233,136 @@ public class Main extends Application {
 		if (playerList.isEmpty())
 			return;
 		
+		// Coordinates for the previous grid the player was in before they moved
+		int prevX = playerList.get(playerNum - 1).getValue().getX();
+		int prevY = playerList.get(playerNum - 1).getValue().getY();
+		
 		if (playerList.get(playerNum - 1).getValue().moveDirection == 1)
 		{
-			int tempY = playerList.get(playerNum - 1).getValue().getY();
-			playerList.get(playerNum - 1).getValue().setY(tempY - 1);
+			playerList.get(playerNum - 1).getValue().setY(prevY - 1);
 			
 			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
 			
 			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
 	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
 	    	
-	    	if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY].type == 0 || map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY].type == 6)
+	    	if (map.mapArray[prevX][prevY].bombExist == false)
 	    	{
-	    		createSpace(playerList.get(playerNum - 1).getValue().getX(), tempY);
-	    		Pair pair = new Pair(0, null);
-		    	map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY] = pair;
+	    		createSpace(prevX, prevY);
+	    		Triple triple = new Triple(0, null, false);
+		    	map.mapArray[prevX][prevY] = triple;
 	    	}
 	    	
-	    	else if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY].type == 3)
+	    	else if (map.mapArray[prevX][prevY].bombExist == true)
 	    	{
 	    		StackPane bombImage = createImage(2, "file:Bomb.png");
-	    		HBox rowTemp = (HBox)root.getChildren().get(tempY);
-		    	rowTemp.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), bombImage);
+	    		HBox rowTemp = (HBox)root.getChildren().get(prevY);
+		    	rowTemp.getChildren().set(prevX, bombImage);
 		    	
-		    	// Changes the type of object in the previous grid to bomb, doesn't matter which bomb it is
-		    	Pair pair = new Pair(3, null);
-		    	map.mapArray[playerList.get(playerNum - 1).getValue().getX()][tempY] = pair;
+		    	// Changes the previous grid the player was in to register there is a bomb there
+		    	Triple triple = new Triple(3, null, true);
+		    	map.mapArray[prevX][prevY] = triple;
 	    	}
-	    		
-	    	FIGURE OUT WHY A PLAYER GETS CREATED IN PREVIOUS GRID	
 	    	
-			Pair pair = new Pair(2, playerList.get(playerNum - 1).getValue());
-			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = pair;
+			Triple triple = new Triple(2, playerList.get(playerNum - 1).getValue(), false);
+			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = triple;
 		}
 		
 		else if (playerList.get(playerNum - 1).getValue().moveDirection == 2)
 		{
-			int tempY = playerList.get(playerNum - 1).getValue().getY();
-			playerList.get(playerNum - 1).getValue().setY(tempY + 1);
+			playerList.get(playerNum - 1).getValue().setY(prevY + 1);
 			
 			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
 			
 			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
 	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
 	    	
-	    	createSpace(playerList.get(playerNum - 1).getValue().getX(), tempY);
+	    	if (map.mapArray[prevX][prevY].bombExist == false)
+	    	{
+	    		createSpace(prevX, prevY);
+	    		Triple triple = new Triple(0, null, false);
+		    	map.mapArray[prevX][prevY] = triple;
+	    	}
 	    	
-			Pair pair = new Pair(2, playerList.get(playerNum - 1).getValue());
-			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = pair;
+	    	else if (map.mapArray[prevX][prevY].bombExist == true)
+	    	{
+	    		StackPane bombImage = createImage(2, "file:Bomb.png");
+	    		HBox rowTemp = (HBox)root.getChildren().get(prevY);
+		    	rowTemp.getChildren().set(prevX, bombImage);
+		    	
+		    	// Changes the previous grid the player was in to register there is a bomb there
+		    	Triple triple = new Triple(3, null, true);
+		    	map.mapArray[prevX][prevY] = triple;
+	    	}
+	    	
+	    	Triple triple = new Triple(2, playerList.get(playerNum - 1).getValue(), false);
+			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = triple;
 		}
 
 		else if (playerList.get(playerNum - 1).getValue().moveDirection == 3)
 		{
-			int tempX = playerList.get(playerNum - 1).getValue().getX();
-			playerList.get(playerNum - 1).getValue().setX(tempX + 1);
+			playerList.get(playerNum - 1).getValue().setX(prevX + 1);
 			
 			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
 			
 			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
 	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
 	    	
-	    	createSpace(tempX, playerList.get(playerNum - 1).getValue().getY());
+	    	if (map.mapArray[prevX][prevY].bombExist == false)
+	    	{
+	    		createSpace(prevX, prevY);
+	    		Triple triple = new Triple(0, null, false);
+		    	map.mapArray[prevX][prevY] = triple;
+	    	}
 	    	
-			Pair pair = new Pair(2, playerList.get(playerNum - 1).getValue());
-			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = pair;
+	    	else if (map.mapArray[prevX][prevY].bombExist == true)
+	    	{
+	    		StackPane bombImage = createImage(2, "file:Bomb.png");
+	    		HBox rowTemp = (HBox)root.getChildren().get(prevY);
+		    	rowTemp.getChildren().set(prevX, bombImage);
+		    	
+		    	// Changes the previous grid the player was in to register there is a bomb there
+		    	Triple triple = new Triple(3, null, true);
+		    	map.mapArray[prevX][prevY] = triple;
+	    	}
+	    	
+			Triple triple = new Triple(2, playerList.get(playerNum - 1).getValue(), false);
+			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = triple;
 		}
 		
 		else if (playerList.get(playerNum - 1).getValue().moveDirection == 4)
 		{
-			int tempX = playerList.get(playerNum - 1).getValue().getX();
-			playerList.get(playerNum - 1).getValue().setX(tempX - 1);
+			playerList.get(playerNum - 1).getValue().setX(prevX - 1);
 			
 			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
 			
 			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
 	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
 	    	
-	    	createSpace(tempX, playerList.get(playerNum - 1).getValue().getY());
+	    	if (map.mapArray[prevX][prevY].bombExist == false)
+	    	{
+	    		createSpace(prevX, prevY);
+	    		Triple triple = new Triple(0, null, false);
+		    	map.mapArray[prevX][prevY] = triple;
+	    	}
 	    	
-			Pair pair = new Pair(2, playerList.get(playerNum - 1).getValue());
-			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = pair;
+	    	else if (map.mapArray[prevX][prevY].bombExist == true)
+	    	{
+	    		StackPane bombImage = createImage(2, "file:Bomb.png");
+	    		HBox rowTemp = (HBox)root.getChildren().get(prevY);
+		    	rowTemp.getChildren().set(prevX, bombImage);
+		    	
+		    	// Changes the previous grid the player was in to register there is a bomb there
+		    	Triple triple = new Triple(3, null, true);
+		    	map.mapArray[prevX][prevY] = triple;
+	    	}
+	    	
+			Triple triple = new Triple(2, playerList.get(playerNum - 1).getValue(), false);
+			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = triple;
 		}
 	}
 	
-	// Checks for collisions with the edge of the screen or a crate
+	// Checks for collisions with the edge of the screen, crate, bomb, or player
 	public void collisionCheck(int playerNum) {
 		
 		if (playerList.isEmpty())
@@ -326,7 +372,7 @@ public class Main extends Application {
 		{
 			if (playerList.get(playerNum - 1).getValue().getY() - 1 >= 0)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() - 1].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() - 1].type != 2)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() - 1].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() - 1].type != 2 && map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() - 1].type != 3)
 				{
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
@@ -341,7 +387,7 @@ public class Main extends Application {
 		{
 			if (playerList.get(playerNum - 1).getValue().getY() + 1 <= 11)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() + 1].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() + 1].type != 2)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() + 1].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() + 1].type != 2 && map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY() + 1].type != 3)
 				{
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
@@ -356,7 +402,7 @@ public class Main extends Application {
 		{
 			if (playerList.get(playerNum - 1).getValue().getX() + 1 <= 11)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList.get(playerNum - 1).getValue().getY()].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList.get(playerNum - 1).getValue().getY()].type != 2)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList.get(playerNum - 1).getValue().getY()].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList.get(playerNum - 1).getValue().getY()].type != 2 && map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList.get(playerNum - 1).getValue().getY()].type != 3)
 				{
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
@@ -371,7 +417,7 @@ public class Main extends Application {
 		{
 			if (playerList.get(playerNum - 1).getValue().getX() - 1 >= 0)
 			{
-				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList.get(playerNum - 1).getValue().getY()].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList.get(playerNum - 1).getValue().getY()].type != 2)
+				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList.get(playerNum - 1).getValue().getY()].type != 1 && map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList.get(playerNum - 1).getValue().getY()].type != 2 && map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList.get(playerNum - 1).getValue().getY()].type != 3)
 				{
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
 				}
