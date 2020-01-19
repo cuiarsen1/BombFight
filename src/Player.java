@@ -14,6 +14,8 @@ public class Player extends Entity {
 	
 	protected boolean moveBoolean; // boolean tracking whether the player is able to move 
 	protected int moveDirection; // represents the direction the player is currently moving in
+	
+	protected Queue bombQueue; // queue used to store the bombs placed by the player
 
     public Player(int x, int y, int playerNum)
     {
@@ -26,6 +28,8 @@ public class Player extends Entity {
         bombMores = 0;
         
         moveBoolean = false;
+        
+        bombQueue = new Queue();
     }
     
     // Method used to create a StackPane of the Player image

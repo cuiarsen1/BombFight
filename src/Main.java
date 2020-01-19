@@ -15,17 +15,19 @@ import java.io.IOException;
 public class Main extends Application {
 
 	private ArrayList<Player> playerList;
-	private ArrayList<Bomb> bombList;
 	
 	protected Map map;
 
 	protected VBox root; // root VBox displaying the main scene
 	
-	protected Player player1;
-	protected Player player2;
+	private Player player1;
+	private Player player2;
 	
-	AnimationTimer Timer;
-		
+	private AnimationTimer Timer;
+	
+	//private long bombMax = 3000000000l; // The amount of time before a bomb detonates
+	private long bombMax = 3; // The amount of time before a bomb detonates
+	
 	/*Method used to create a StackPane of any object other than the Player 
 	(Space, Crate, BombMore, BombBoost)*/
 	public StackPane createImage(int numImages, String imageFile) {
@@ -202,6 +204,7 @@ public class Main extends Application {
 		return player;
 	}
 	
+	// Method used to initialize a bomb and display it on the screen
 	public Bomb createBomb(Player player) {
 		
 		Bomb bomb = new Bomb(player.getX(), player.getY()); // Initialize bomb 
@@ -429,11 +432,110 @@ public class Main extends Application {
 		}
 	}
 	
+	// Method used to detonate a player's Bomb
+	public void detonate(Player player) {
+		
+		Bomb bomb = player.bombQueue.dequeue();
+		createFlames(bomb.getX(), bomb.getY(), player.bombBoosts);
+		System.out.println("Detonate");
+	}
+	
+	/*Method used to create flames from the detonation of a 
+	bomb, spreading outwards from the specified location*/
+	public void createFlames(int x, int y, int bombBoosts) {
+		
+		System.out.println("Hi");
+		
+		int currentX = x;
+		int currentY = y;
+		
+		// Creates flames spreading upwards
+		
+		for (int i = 0; i < 3 + bombBoosts; i += 1)
+		{
+			if (currentY < 0)
+				break;
+			
+			StackPane flameImage = createImage(1, "file:Flame.png");
+			
+			HBox rowTemp = (HBox)root.getChildren().get(currentY);
+	    	rowTemp.getChildren().set(currentX, flameImage);
+	    	
+	    	Triple triple = new Triple(6, null, false);
+	    	map.mapArray[currentX][currentY] = triple;
+	    	
+	    	currentY -= 1;
+		}
+		
+		currentX = x;
+		currentY = y;
+		
+		// Creates flames spreading downwards
+		
+		for (int i = 0; i < 3 + bombBoosts; i += 1)
+		{
+			if (currentY > 11)
+				break;
+			
+			StackPane flameImage = createImage(1, "file:Flame.png");
+			
+			HBox rowTemp = (HBox)root.getChildren().get(currentY);
+	    	rowTemp.getChildren().set(currentX, flameImage);
+	    	
+	    	Triple triple = new Triple(6, null, false);
+	    	map.mapArray[currentX][currentY] = triple;
+	    	
+	    	currentY += 1;
+		}
+		
+		currentX = x;
+		currentY = y;
+		
+		// Creates flames spreading to the right
+		
+		for (int i = 0; i < 3 + bombBoosts; i += 1)
+		{
+			if (currentX > 11)
+				break;
+			
+			StackPane flameImage = createImage(1, "file:Flame.png");
+			
+			HBox rowTemp = (HBox)root.getChildren().get(currentY);
+	    	rowTemp.getChildren().set(currentX, flameImage);
+	    	
+	    	Triple triple = new Triple(6, null, false);
+	    	map.mapArray[currentX][currentY] = triple;
+	    	
+	    	currentX += 1;
+		}
+		
+		currentX = x;
+		currentY = y;
+		
+		// Creates flames spreading to the left
+		
+		for (int i = 0; i < 3 + bombBoosts; i += 1)
+		{
+			if (currentX < 0)
+				break;
+			
+			StackPane flameImage = createImage(1, "file:Flame.png");
+			
+			HBox rowTemp = (HBox)root.getChildren().get(currentY);
+	    	rowTemp.getChildren().set(currentX, flameImage);
+	    	
+	    	Triple triple = new Triple(6, null, false);
+	    	map.mapArray[currentX][currentY] = triple;
+	    	
+	    	currentX -= 1;
+		}
+		
+	}
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
 		playerList = new ArrayList();
-		bombList = new ArrayList();
 		
 		root = new VBox();
 		
@@ -472,8 +574,6 @@ public class Main extends Application {
 				else if (event.getCode() == KeyCode.A)
 					playerList.get(0).getValue().moveDirection = 4;
 				
-				
-				
 				// Handles movement for Player 2
 				
 				if (event.getCode() == KeyCode.UP)
@@ -485,7 +585,7 @@ public class Main extends Application {
 				{
 					playerList.get(1).getValue().moveDirection = 2;
 				}
-					
+				
 				else if (event.getCode() == KeyCode.RIGHT)
 				{
 					playerList.get(1).getValue().moveDirection = 3;
@@ -494,9 +594,7 @@ public class Main extends Application {
 				else if (event.getCode() == KeyCode.LEFT)
 				{
 					playerList.get(1).getValue().moveDirection = 4;
-				}
-				
-				
+				}	
 			}
 		});
 		
@@ -523,9 +621,10 @@ public class Main extends Application {
 				else if (event.getCode() == KeyCode.A)
 					playerList.get(0).getValue().moveBoolean = false;
 				
-				if (event.getCode() == KeyCode.C)
+				if (event.getCode() == KeyCode.C && playerList.get(0).getValue().bombQueue.size() < playerList.get(0).getValue().bombMores + 1)
 				{
 					Bomb bomb = createBomb(playerList.get(0).getValue());
+					playerList.get(0).getValue().bombQueue.enqueue(bomb);
 				}
 				
 				// Handles stopping movement for Player 2
@@ -542,9 +641,10 @@ public class Main extends Application {
 				else if (event.getCode() == KeyCode.LEFT)
 					playerList.get(1).getValue().moveBoolean = false;
 				
-				if (event.getCode() == KeyCode.SLASH)
+				if (event.getCode() == KeyCode.SLASH && playerList.get(1).getValue().bombQueue.size() < playerList.get(1).getValue().bombMores + 1)
 				{
 					Bomb bomb = createBomb(playerList.get(1).getValue());
+					playerList.get(1).getValue().bombQueue.enqueue(bomb);
 				}
 			}
 		});
@@ -594,6 +694,34 @@ public class Main extends Application {
 	private void upDate() throws IOException {
 		collisionCheck(1);
 		collisionCheck(2);
+		
+		// Increments the timer on every existing bomb
+		
+		if (playerList.get(0).getValue().bombQueue.size() > 0)
+		{
+			for (int i = 0; i < playerList.get(0).getValue().bombQueue.size(); i += 1)
+			{
+				playerList.get(0).getValue().bombQueue.queue[i].timer += 1;
+			}
+			
+			if (playerList.get(0).getValue().bombQueue.peek().timer >= bombMax)
+			{
+				detonate(playerList.get(0).getValue());
+			}
+		}
+		
+		if (playerList.get(1).getValue().bombQueue.size() > 0)
+		{
+			for (int i = 0; i < playerList.get(1).getValue().bombQueue.size(); i += 1)
+			{
+				playerList.get(1).getValue().bombQueue.queue[i].timer += 1;
+			}
+			
+			if (playerList.get(1).getValue().bombQueue.peek().timer >= bombMax)
+			{
+				detonate(playerList.get(1).getValue());
+			}
+		}
 	}
 	
 	private void upDateMove() throws IOException {

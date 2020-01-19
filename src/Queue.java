@@ -1,16 +1,17 @@
+/*Class used to create queues. The queue will be used to store Bomb objects in a first in first 
+out basis. This helps track how many bombs the player has placed at a time, and which bomb to 
+detonate first*/
+
 public class Queue {
 
-    private Bomb[] queue; // Array used to implement the Queue
+    protected Bomb[] queue; // Array used to implement the Queue
 
     private int length; // tracks the amount of items in the queue
-    
-
-	protected long timer; // timer used to track when to dequeue the next bomb
 
     public Queue()
     {
-        int queueSize = 20000; // size of the array
-
+        int queueSize = 5; // size of the array
+        
         queue = new Bomb[queueSize];
 
         length = 0;
@@ -44,14 +45,12 @@ public class Queue {
 
     // returns the first bomb of the queue
     public Bomb peek() {
-
         return queue[0];
 
     }
 
     // returns the size of the queue
     public int size() {
-
         return length;
     }
 

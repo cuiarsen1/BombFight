@@ -4,6 +4,8 @@ import javafx.scene.layout.StackPane;
 
 public class Bomb extends Entity {
 	
+	protected long timer = 0; // tracks how long the bomb has existed to track when to detonate
+	
     public Bomb(int x, int y)
     {
         super(x, y);
