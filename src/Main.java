@@ -22,9 +22,6 @@ public class Main extends Application {
 
 	protected VBox root; // root VBox displaying the main scene
 	
-	private Player player1;
-	private Player player2;
-	
 	private AnimationTimer Timer;
 	
 	private long bombMax = 180; // The amount of time in frames before a bomb detonates
@@ -99,7 +96,7 @@ public class Main extends Application {
 				StackPane pane = createImage(1, "file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
-				Triple triple = new Triple(0, null, false); // CHANGE BACK
+				Triple triple = new Triple(1, null, false);
 				map.mapArray[j][i] = triple;
 			}
 			
@@ -126,7 +123,7 @@ public class Main extends Application {
 				StackPane pane = createImage(1, "file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
-				Triple triple = new Triple(0, null, false); // CHANGE BACK
+				Triple triple = new Triple(1, null, false);
 				map.mapArray[j][i] = triple;
 			}
 			
@@ -173,7 +170,7 @@ public class Main extends Application {
 	}
 	
 	// Creates and initializes the player on the field
-	public Player createPlayer(int playerNum, int x, int y) {
+	public void createPlayer(int playerNum, int x, int y) {
 		
 		Player player = null;
 		
@@ -201,8 +198,6 @@ public class Main extends Application {
 		map.mapArray[x][y] = triple;
     	
 		playerList.add(new Node<Player>(player));
-		
-		return player;
 	}
 	
 	// Method used to initialize a bomb and display it on the screen
@@ -434,23 +429,19 @@ public class Main extends Application {
 	}
 	
 	// Method used to detonate a player's Bomb
-	public void detonate(Player player) {
+	public Bomb detonate(Player player) {
 		
 		Bomb bomb = player.bombQueue.dequeue();
-		createFlames(bomb.getX(), bomb.getY(), player.bombBoosts);
-		System.out.println("Detonate");
-	}
-	
-	/*Method used to create flames from the detonation of a 
-	bomb, spreading outwards from the specified location*/
-	public void createFlames(int x, int y, int bombBoosts) {
 		
-		int currentX = x;
-		int currentY = y;
+		int currentX = bomb.getX();
+		int currentY = bomb.getY();
+		
+		/*Creates flames from the detonation of a 
+		bomb, spreading outwards from the specified location*/
 		
 		// Creates flames spreading upwards
 		
-		for (int i = 0; i < 3 + bombBoosts; i += 1)
+		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
 		{
 			if (currentY < 0)
 				break;
@@ -466,12 +457,12 @@ public class Main extends Application {
 	    	currentY -= 1;
 		}
 		
-		currentX = x;
-		currentY = y;
+		currentX = bomb.getX();
+		currentY = bomb.getY();
 		
 		// Creates flames spreading downwards
 		
-		for (int i = 0; i < 3 + bombBoosts; i += 1)
+		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
 		{
 			if (currentY > 11)
 				break;
@@ -487,12 +478,12 @@ public class Main extends Application {
 	    	currentY += 1;
 		}
 		
-		currentX = x;
-		currentY = y;
+		currentX = bomb.getX();
+		currentY = bomb.getY();
 		
 		// Creates flames spreading to the right
 		
-		for (int i = 0; i < 3 + bombBoosts; i += 1)
+		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
 		{
 			if (currentX > 11)
 				break;
@@ -508,12 +499,12 @@ public class Main extends Application {
 	    	currentX += 1;
 		}
 		
-		currentX = x;
-		currentY = y;
+		currentX = bomb.getX();
+		currentY = bomb.getY();
 		
 		// Creates flames spreading to the left
 		
-		for (int i = 0; i < 3 + bombBoosts; i += 1)
+		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
 		{
 			if (currentX < 0)
 				break;
@@ -529,6 +520,13 @@ public class Main extends Application {
 	    	currentX -= 1;
 		}
 		
+		return bomb;
+	}
+	
+	WORK ON ITEMS
+	// Method used to spawn items on the playing field
+	public void createItem() {
+		
 	}
 	
 	@Override
@@ -543,8 +541,8 @@ public class Main extends Application {
 		// Initializes playing field
 		createMap();
 		
-		player1 = createPlayer(1, 0, 6);
-		player2 = createPlayer(2, 11, 5);
+		createPlayer(1, 0, 6);
+		createPlayer(2, 11, 5);
 		
 		//Bomb bomb = createBomb(player1);
 		
@@ -698,8 +696,8 @@ public class Main extends Application {
 			long oldTimeVelocity = 0;
 			long intervalVelocity = 150000000;
 			
-			long oldTimeDetonate = 0;
-			long intervalDetonate = 3000000000l;
+			long oldTimeItem = 0;
+			long intervalItem = 10000000000l;
 			
 			@Override
 			public void handle(long time) {
@@ -727,17 +725,17 @@ public class Main extends Application {
 					oldTimeVelocity = time;
 				}
 				
-				/*if (time - oldTimeDetonate > intervalDetonate)
+				if (time - oldTimeItem > intervalItem)
 				{
 					try {
-						upDateDetonate();
+						spawnItem();
 						
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					oldTimeDetonate = time;
-				}*/
+					oldTimeItem = time;
+				}
 
 			}
 		};
@@ -802,6 +800,12 @@ public class Main extends Application {
 				detonate(playerList.get(1).getValue());
 			}
 		}
+	}
+	
+	// Every 10 seconds, an item will spawn on the field
+	private void spawnItem() throws IOException {
+		
+		createItem();
 	}
 	
 	public static void main(String[] args) throws IOException {
