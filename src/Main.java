@@ -10,6 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.io.IOException;
 
 public class Main extends Application {
@@ -25,8 +27,7 @@ public class Main extends Application {
 	
 	private AnimationTimer Timer;
 	
-	//private long bombMax = 3000000000l; // The amount of time before a bomb detonates
-	private long bombMax = 3; // The amount of time before a bomb detonates
+	private long bombMax = 180; // The amount of time in frames before a bomb detonates
 	
 	/*Method used to create a StackPane of any object other than the Player 
 	(Space, Crate, BombMore, BombBoost)*/
@@ -98,7 +99,7 @@ public class Main extends Application {
 				StackPane pane = createImage(1, "file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
-				Triple triple = new Triple(1, null, false);
+				Triple triple = new Triple(0, null, false); // CHANGE BACK
 				map.mapArray[j][i] = triple;
 			}
 			
@@ -125,7 +126,7 @@ public class Main extends Application {
 				StackPane pane = createImage(1, "file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
-				Triple triple = new Triple(1, null, false);
+				Triple triple = new Triple(0, null, false); // CHANGE BACK
 				map.mapArray[j][i] = triple;
 			}
 			
@@ -444,8 +445,6 @@ public class Main extends Application {
 	bomb, spreading outwards from the specified location*/
 	public void createFlames(int x, int y, int bombBoosts) {
 		
-		System.out.println("Hi");
-		
 		int currentX = x;
 		int currentY = y;
 		
@@ -563,38 +562,55 @@ public class Main extends Application {
 				// Handles movement for Player 1
 				
 				if (event.getCode() == KeyCode.W)
+				{
+					playerList.get(0).getValue().moveBoolean = true;
 					playerList.get(0).getValue().moveDirection = 1;
+				}
+					
 				
 				else if (event.getCode() == KeyCode.S)
+				{
+					playerList.get(0).getValue().moveBoolean = true;
 					playerList.get(0).getValue().moveDirection = 2;
+				}
 				
 				else if (event.getCode() == KeyCode.D)
+				{
+					playerList.get(0).getValue().moveBoolean = true;
 					playerList.get(0).getValue().moveDirection = 3;
+				}
 				
 				else if (event.getCode() == KeyCode.A)
+				{
+					playerList.get(0).getValue().moveBoolean = true;
 					playerList.get(0).getValue().moveDirection = 4;
+				}
 				
 				// Handles movement for Player 2
 				
 				if (event.getCode() == KeyCode.UP)
 				{
+					playerList.get(1).getValue().moveBoolean = true;
 					playerList.get(1).getValue().moveDirection = 1;
 				}
 				
 				else if (event.getCode() == KeyCode.DOWN)
 				{
+					playerList.get(1).getValue().moveBoolean = true;
 					playerList.get(1).getValue().moveDirection = 2;
 				}
 				
 				else if (event.getCode() == KeyCode.RIGHT)
 				{
+					playerList.get(1).getValue().moveBoolean = true;
 					playerList.get(1).getValue().moveDirection = 3;
 				}
 				
 				else if (event.getCode() == KeyCode.LEFT)
 				{
+					playerList.get(1).getValue().moveBoolean = true;
 					playerList.get(1).getValue().moveDirection = 4;
-				}	
+				}
 			}
 		});
 		
@@ -610,16 +626,29 @@ public class Main extends Application {
 				// Handles stopping movement for the players
 				
 				if (event.getCode() == KeyCode.W)
+				{
 					playerList.get(0).getValue().moveBoolean = false;
+					playerList.get(0).getValue().moveDirection = 0;
+				}
+					
 					
 				else if (event.getCode() == KeyCode.S)
+				{
 					playerList.get(0).getValue().moveBoolean = false;
+					playerList.get(0).getValue().moveDirection = 0;
+				}
 
 				else if (event.getCode() == KeyCode.D)
+				{
 					playerList.get(0).getValue().moveBoolean = false;
-
+					playerList.get(0).getValue().moveDirection = 0;
+				}
+				
 				else if (event.getCode() == KeyCode.A)
+				{
 					playerList.get(0).getValue().moveBoolean = false;
+					playerList.get(0).getValue().moveDirection = 0;
+				}
 				
 				if (event.getCode() == KeyCode.C && playerList.get(0).getValue().bombQueue.size() < playerList.get(0).getValue().bombMores + 1)
 				{
@@ -630,16 +659,28 @@ public class Main extends Application {
 				// Handles stopping movement for Player 2
 				
 				if (event.getCode() == KeyCode.UP)
+				{
 					playerList.get(1).getValue().moveBoolean = false;
+					playerList.get(1).getValue().moveDirection = 0;
+				}
 
 				else if (event.getCode() == KeyCode.DOWN)
+				{
 					playerList.get(1).getValue().moveBoolean = false;
+					playerList.get(1).getValue().moveDirection = 0;
+				}
 
 				else if (event.getCode() == KeyCode.RIGHT)
+				{
 					playerList.get(1).getValue().moveBoolean = false;
+					playerList.get(1).getValue().moveDirection = 0;
+				}
 				
 				else if (event.getCode() == KeyCode.LEFT)
+				{
 					playerList.get(1).getValue().moveBoolean = false;
+					playerList.get(1).getValue().moveDirection = 0;
+				}
 				
 				if (event.getCode() == KeyCode.SLASH && playerList.get(1).getValue().bombQueue.size() < playerList.get(1).getValue().bombMores + 1)
 				{
@@ -655,7 +696,10 @@ public class Main extends Application {
 			// Variables used to track the time
 			
 			long oldTimeVelocity = 0;
-			long intervalVelocity = 100000000;
+			long intervalVelocity = 150000000;
+			
+			long oldTimeDetonate = 0;
+			long intervalDetonate = 3000000000l;
 			
 			@Override
 			public void handle(long time) {
@@ -665,40 +709,76 @@ public class Main extends Application {
 				// Move the player every fifth of a second if direction key held down
 				
 				try {
-					upDate();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					upDateCollision();
+					upDateDetonate();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				
 				if (time - oldTimeVelocity > intervalVelocity) {
 					try {
 						upDateMove();
+						
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					oldTimeVelocity = time;
 				}
+				
+				/*if (time - oldTimeDetonate > intervalDetonate)
+				{
+					try {
+						upDateDetonate();
+						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					oldTimeDetonate = time;
+				}*/
 
 			}
 		};
 		
 		Timer.start();
-
 		primaryStage.setTitle("Bomb Fight");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
-	private void upDate() throws IOException {
+	private void upDateCollision() throws IOException {
 		collisionCheck(1);
 		collisionCheck(2);
+	}
+	
+	private void upDateMove() throws IOException {
+		
+		if (playerList.get(0).getValue().moveBoolean == true)
+		{
+			movePlayers(1, "file:PlayerRed.png");
+		}
+		
+		if (playerList.get(1).getValue().moveBoolean == true)
+		{
+			movePlayers(2, "file:PlayerBlue.png");
+		}
+		
+		playerList.get(0).getValue().moveBoolean = false;
+		playerList.get(1).getValue().moveBoolean = false;
+		
+		/*// If the player collides with an obstacle, end the game
+		if (stopGame == true)
+			gameOver();*/
+	}
+	
+	private void upDateDetonate() throws IOException {
 		
 		// Increments the timer on every existing bomb
-		
+
 		if (playerList.get(0).getValue().bombQueue.size() > 0)
-		{
+		{	
 			for (int i = 0; i < playerList.get(0).getValue().bombQueue.size(); i += 1)
 			{
 				playerList.get(0).getValue().bombQueue.queue[i].timer += 1;
@@ -722,23 +802,6 @@ public class Main extends Application {
 				detonate(playerList.get(1).getValue());
 			}
 		}
-	}
-	
-	private void upDateMove() throws IOException {
-		
-		if (playerList.get(0).getValue().moveBoolean == true)
-		{
-			movePlayers(1, "file:PlayerRed.png");
-		}
-		
-		if (playerList.get(1).getValue().moveBoolean == true)
-		{
-			movePlayers(2, "file:PlayerBlue.png");
-		}
-		
-		/*// If the player collides with an obstacle, end the game
-		if (stopGame == true)
-			gameOver();*/
 	}
 	
 	public static void main(String[] args) throws IOException {
