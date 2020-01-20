@@ -10,9 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
 import java.io.IOException;
+import java.util.Random;
 
 public class Main extends Application {
 
@@ -26,58 +25,64 @@ public class Main extends Application {
 	
 	private long bombMax = 180; // The amount of time in frames before a bomb detonates
 	
-	/*Method used to create a StackPane of any object other than the Player 
-	(Space, Crate, BombMore, BombBoost)*/
-	public StackPane createImage(int numImages, String imageFile) {
+	//Method used to create a single image, either a Space, Crate, Item, or Flame
+	public StackPane createImage(String imageFile) {
 		
 		StackPane pane = new StackPane();
 		
-		if (numImages == 1)
-		{
-			Image tempImage = new Image(imageFile);
-			ImageView tempImageView = new ImageView(tempImage);
-			tempImageView.setFitHeight(50);
-			tempImageView.setFitWidth(50);
-			
-			pane.getChildren().add(tempImageView);
-		}
+		Image tempImage = new Image(imageFile);
+		ImageView tempImageView = new ImageView(tempImage);
+		tempImageView.setFitHeight(50);
+		tempImageView.setFitWidth(50);
 		
-		else if (numImages == 2)
-		{
-			Image spaceImage = new Image("file:Space.png");
-			ImageView spaceImageView = new ImageView(spaceImage);
-			spaceImageView.setFitHeight(50);
-			spaceImageView.setFitWidth(50);
-			
-			Image tempImage = new Image(imageFile);
-			ImageView tempImageView = new ImageView(tempImage);
-			tempImageView.setFitHeight(50);
-			tempImageView.setFitWidth(50);
-			
-			pane.getChildren().addAll(spaceImageView, tempImageView);
-		}
+		pane.getChildren().add(tempImageView);
 		
-		// Creates images for the case that the player is moving out of a grid that 
-		// contains both the other player and a bomb
-		else if (numImages == 3) {
-			
-			Image spaceImage = new Image("file:Space.png");
-			ImageView spaceImageView = new ImageView(spaceImage);
-			spaceImageView.setFitHeight(50);
-			spaceImageView.setFitWidth(50);
-			
-			Image bombImage = new Image("file:Bomb.png");
-			ImageView bombImageView = new ImageView(bombImage);
-			bombImageView.setFitHeight(50);
-			bombImageView.setFitWidth(50);
-			
-			Image playerImage = new Image(imageFile);
-			ImageView playerImageView = new ImageView(playerImage);
-			playerImageView.setFitHeight(50);
-			playerImageView.setFitWidth(50);
-			
-			pane.getChildren().addAll(spaceImageView, bombImageView, playerImageView);
-		}
+		return pane;
+	}
+	
+	/*Creates images for the case when there are 2 images on top of each 
+	other, such as a Bomb on a grid or a player on a grid*/
+	public StackPane createImage(String imageFile1, String imageFile2) {
+	
+		StackPane pane = new StackPane();
+		
+		Image spaceImage = new Image(imageFile1);
+		ImageView spaceImageView = new ImageView(spaceImage);
+		spaceImageView.setFitHeight(50);
+		spaceImageView.setFitWidth(50);
+		
+		Image tempImage = new Image(imageFile2);
+		ImageView tempImageView = new ImageView(tempImage);
+		tempImageView.setFitHeight(50);
+		tempImageView.setFitWidth(50);
+		
+		pane.getChildren().addAll(spaceImageView, tempImageView);
+		
+		return pane;
+	}
+	
+	/*Creates images for the case that the player is moving out of a grid
+	that contains both the other player and a bomb*/
+	public StackPane createImage(String imageFile1, String imageFile2, String imageFile3) {
+		
+		StackPane pane = new StackPane();
+		
+		Image spaceImage = new Image(imageFile1);
+		ImageView spaceImageView = new ImageView(spaceImage);
+		spaceImageView.setFitHeight(50);
+		spaceImageView.setFitWidth(50);
+		
+		Image bombImage = new Image(imageFile2);
+		ImageView bombImageView = new ImageView(bombImage);
+		bombImageView.setFitHeight(50);
+		bombImageView.setFitWidth(50);
+		
+		Image playerImage = new Image(imageFile3);
+		ImageView playerImageView = new ImageView(playerImage);
+		playerImageView.setFitHeight(50);
+		playerImageView.setFitWidth(50);
+		
+		pane.getChildren().addAll(spaceImageView, bombImageView, playerImageView);
 		
 		return pane;
 	}
@@ -93,7 +98,7 @@ public class Main extends Application {
 			
 			for (int j = 0; j < 12; j += 1)
 			{	
-				StackPane pane = createImage(1, "file:Crate.png");
+				StackPane pane = createImage("file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
 				Triple triple = new Triple(1, null, false);
@@ -111,7 +116,7 @@ public class Main extends Application {
 			
 			for (int j = 0; j < 2; j += 1)
 			{
-				StackPane pane = createImage(1, "file:Space.png");
+				StackPane pane = createImage("file:Space.png");
 				tempBox.getChildren().add(pane);
 				
 				Triple triple = new Triple(0, null, false);
@@ -120,7 +125,7 @@ public class Main extends Application {
 			
 			for (int j = 2; j < 10; j += 1)
 			{
-				StackPane pane = createImage(1, "file:Crate.png");
+				StackPane pane = createImage("file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
 				Triple triple = new Triple(1, null, false);
@@ -129,7 +134,7 @@ public class Main extends Application {
 			
 			for (int j = 10; j < 12; j += 1)
 			{
-				StackPane pane = createImage(1, "file:Space.png");
+				StackPane pane = createImage("file:Space.png");
 				tempBox.getChildren().add(pane);
 				
 				Triple triple = new Triple(0, null, false);
@@ -147,7 +152,7 @@ public class Main extends Application {
 			
 			for (int j = 0; j < 12; j += 1)
 			{
-				StackPane pane = createImage(1, "file:Crate.png");
+				StackPane pane = createImage("file:Crate.png");
 				tempBox.getChildren().add(pane);
 				
 				Triple triple = new Triple(1, null, false);
@@ -160,7 +165,7 @@ public class Main extends Application {
 	
 	public void createSpace(int x, int y) {
 		
-		StackPane spaceImage = createImage(1, "file:Space.png");
+		StackPane spaceImage = createImage("file:Space.png");
 		
 		HBox row = (HBox)root.getChildren().get(y);
     	row.getChildren().set(x, spaceImage);
@@ -236,129 +241,72 @@ public class Main extends Application {
 		int prevX = playerList.get(playerNum - 1).getValue().getX();
 		int prevY = playerList.get(playerNum - 1).getValue().getY();
 		
+		// Changes coordinates of the player object
+		
 		if (playerList.get(playerNum - 1).getValue().moveDirection == 1)
 		{
 			playerList.get(playerNum - 1).getValue().setY(prevY - 1);
-			
-			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
-			
-			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
-	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
-	    	
-	    	if (map.mapArray[prevX][prevY].bombExist == false)
-	    	{
-	    		createSpace(prevX, prevY);
-	    		Triple triple = new Triple(0, null, false);
-		    	map.mapArray[prevX][prevY] = triple;
-	    	}
-	    	
-	    	else if (map.mapArray[prevX][prevY].bombExist == true)
-	    	{
-	    		StackPane bombImage = createImage(2, "file:Bomb.png");
-	    		HBox rowTemp = (HBox)root.getChildren().get(prevY);
-		    	rowTemp.getChildren().set(prevX, bombImage);
-		    	
-		    	// Changes the previous grid the player was in to register there is a bomb there
-		    	Triple triple = new Triple(3, null, true);
-		    	map.mapArray[prevX][prevY] = triple;
-	    	}
-	    	
-			Triple triple = new Triple(2, playerList.get(playerNum - 1).getValue(), false);
-			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = triple;
 		}
 		
 		else if (playerList.get(playerNum - 1).getValue().moveDirection == 2)
 		{
 			playerList.get(playerNum - 1).getValue().setY(prevY + 1);
-			
-			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
-			
-			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
-	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
-	    	
-	    	if (map.mapArray[prevX][prevY].bombExist == false)
-	    	{
-	    		createSpace(prevX, prevY);
-	    		Triple triple = new Triple(0, null, false);
-		    	map.mapArray[prevX][prevY] = triple;
-	    	}
-	    	
-	    	else if (map.mapArray[prevX][prevY].bombExist == true)
-	    	{
-	    		StackPane bombImage = createImage(2, "file:Bomb.png");
-	    		HBox rowTemp = (HBox)root.getChildren().get(prevY);
-		    	rowTemp.getChildren().set(prevX, bombImage);
-		    	
-		    	// Changes the previous grid the player was in to register there is a bomb there
-		    	Triple triple = new Triple(3, null, true);
-		    	map.mapArray[prevX][prevY] = triple;
-	    	}
-	    	
-	    	Triple triple = new Triple(2, playerList.get(playerNum - 1).getValue(), false);
-			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = triple;
 		}
 
 		else if (playerList.get(playerNum - 1).getValue().moveDirection == 3)
 		{
 			playerList.get(playerNum - 1).getValue().setX(prevX + 1);
-			
-			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
-			
-			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
-	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
-	    	
-	    	if (map.mapArray[prevX][prevY].bombExist == false)
-	    	{
-	    		createSpace(prevX, prevY);
-	    		Triple triple = new Triple(0, null, false);
-		    	map.mapArray[prevX][prevY] = triple;
-	    	}
-	    	
-	    	else if (map.mapArray[prevX][prevY].bombExist == true)
-	    	{
-	    		StackPane bombImage = createImage(2, "file:Bomb.png");
-	    		HBox rowTemp = (HBox)root.getChildren().get(prevY);
-		    	rowTemp.getChildren().set(prevX, bombImage);
-		    	
-		    	// Changes the previous grid the player was in to register there is a bomb there
-		    	Triple triple = new Triple(3, null, true);
-		    	map.mapArray[prevX][prevY] = triple;
-	    	}
-	    	
-			Triple triple = new Triple(2, playerList.get(playerNum - 1).getValue(), false);
-			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = triple;
 		}
 		
 		else if (playerList.get(playerNum - 1).getValue().moveDirection == 4)
 		{
 			playerList.get(playerNum - 1).getValue().setX(prevX - 1);
-			
-			StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
-			
-			HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
-	    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
-	    	
-	    	if (map.mapArray[prevX][prevY].bombExist == false)
-	    	{
-	    		createSpace(prevX, prevY);
-	    		Triple triple = new Triple(0, null, false);
-		    	map.mapArray[prevX][prevY] = triple;
-	    	}
-	    	
-	    	else if (map.mapArray[prevX][prevY].bombExist == true)
-	    	{
-	    		StackPane bombImage = createImage(2, "file:Bomb.png");
-	    		HBox rowTemp = (HBox)root.getChildren().get(prevY);
-		    	rowTemp.getChildren().set(prevX, bombImage);
-		    	
-		    	// Changes the previous grid the player was in to register there is a bomb there
-		    	Triple triple = new Triple(3, null, true);
-		    	map.mapArray[prevX][prevY] = triple;
-	    	}
-	    	
-			Triple triple = new Triple(2, playerList.get(playerNum - 1).getValue(), false);
-			map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = triple;
 		}
+		
+		// Creates an image of the player in its new location it moved to
+		
+		StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
+		
+		HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
+    	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
+		
+    	// Create a Space image in the previous grid the player was in
+		if (map.mapArray[prevX][prevY].bombExist == false)
+    	{
+    		createSpace(prevX, prevY);
+    		Triple triple = new Triple(0, null, false);
+	    	map.mapArray[prevX][prevY] = triple;
+    	}
+    	
+		// If there was a bomb in the previous grid the player was in, keep it there
+    	else if (map.mapArray[prevX][prevY].bombExist == true)
+    	{
+    		StackPane bombImage = createImage("file:Space.png", "file:Bomb.png");
+    		HBox rowTemp = (HBox)root.getChildren().get(prevY);
+	    	rowTemp.getChildren().set(prevX, bombImage);
+	    	
+	    	// Changes the previous grid the player was in to register there is a bomb there
+	    	Triple triple = new Triple(3, null, true);
+	    	map.mapArray[prevX][prevY] = triple;
+    	}
+		
+		// If the player picks up an Item, give them the corresponding power up
+		
+		if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()].type == 4)
+    	{
+    		playerList.get(playerNum - 1).getValue().bombMores += 1;
+    		System.out.println(playerList.get(playerNum - 1).getValue().bombMores);
+    	}
+    	
+    	if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()].type == 5)
+    	{
+    		playerList.get(playerNum - 1).getValue().bombBoosts += 1;
+    		System.out.println(playerList.get(playerNum - 1).getValue().bombBoosts);
+    	}
+		
+    	// Update the map on where the player is currently located
+		Triple triple = new Triple(2, playerList.get(playerNum - 1).getValue(), false);
+		map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()] = triple;
 	}
 	
 	// Checks for collisions with the edge of the screen, crate, bomb, or player
@@ -446,7 +394,7 @@ public class Main extends Application {
 			if (currentY < 0)
 				break;
 			
-			StackPane flameImage = createImage(1, "file:Flame.png");
+			StackPane flameImage = createImage("file:Flame.png");
 			
 			HBox rowTemp = (HBox)root.getChildren().get(currentY);
 	    	rowTemp.getChildren().set(currentX, flameImage);
@@ -467,7 +415,7 @@ public class Main extends Application {
 			if (currentY > 11)
 				break;
 			
-			StackPane flameImage = createImage(1, "file:Flame.png");
+			StackPane flameImage = createImage("file:Flame.png");
 			
 			HBox rowTemp = (HBox)root.getChildren().get(currentY);
 	    	rowTemp.getChildren().set(currentX, flameImage);
@@ -488,7 +436,7 @@ public class Main extends Application {
 			if (currentX > 11)
 				break;
 			
-			StackPane flameImage = createImage(1, "file:Flame.png");
+			StackPane flameImage = createImage("file:Flame.png");
 			
 			HBox rowTemp = (HBox)root.getChildren().get(currentY);
 	    	rowTemp.getChildren().set(currentX, flameImage);
@@ -509,7 +457,7 @@ public class Main extends Application {
 			if (currentX < 0)
 				break;
 			
-			StackPane flameImage = createImage(1, "file:Flame.png");
+			StackPane flameImage = createImage("file:Flame.png");
 			
 			HBox rowTemp = (HBox)root.getChildren().get(currentY);
 	    	rowTemp.getChildren().set(currentX, flameImage);
@@ -523,10 +471,48 @@ public class Main extends Application {
 		return bomb;
 	}
 	
-	WORK ON ITEMS
 	// Method used to spawn items on the playing field
 	public void createItem() {
 		
+		Random random = new Random();
+		int itemNum = random.nextInt(2);
+		
+		boolean coordinateFound = false; // Statement checking if an empty Space has been found
+		
+		int x = 0;
+		int y = 0;;
+		
+		// Generate random coordinates until one of them is an empty Space
+		while (coordinateFound == false)
+		{
+			x = random.nextInt(12);
+			y = random.nextInt(12);
+			
+			if (map.mapArray[x][y].type == 0)
+				coordinateFound = true;
+		}
+		
+		if (itemNum == 0)
+		{
+			StackPane bombMoreImage = createImage("file:BombMore.jpg");
+			
+			HBox rowTemp = (HBox)root.getChildren().get(y);
+	    	rowTemp.getChildren().set(x, bombMoreImage);
+	    	
+	    	Triple triple = new Triple(4, null, false);
+	    	map.mapArray[x][y] = triple;
+		}
+		
+		else if (itemNum == 1)
+		{
+			StackPane bombBoostImage = createImage("file:BombBoost.jpg");
+			
+			HBox rowTemp = (HBox)root.getChildren().get(y);
+	    	rowTemp.getChildren().set(x, bombBoostImage);
+	    	
+	    	Triple triple = new Triple(5, null, false);
+	    	map.mapArray[x][y] = triple;
+		}
 	}
 	
 	@Override
@@ -804,7 +790,6 @@ public class Main extends Application {
 	
 	// Every 10 seconds, an item will spawn on the field
 	private void spawnItem() throws IOException {
-		
 		createItem();
 	}
 	
