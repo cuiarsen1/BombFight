@@ -1,5 +1,5 @@
 public class BombBoost extends Item {
-
+	
     public BombBoost(int x, int y)
     {
         super(x, y);

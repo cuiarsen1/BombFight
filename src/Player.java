@@ -4,7 +4,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 
-public class Player extends Entity {
+public class Player extends Entity implements CreateImage {
 	
 	protected int playerNum; // integer representing the number of the player
 	
@@ -16,6 +16,9 @@ public class Player extends Entity {
 	protected int moveDirection; // represents the direction the player is currently moving in
 	
 	protected Queue bombQueue; // queue used to store the bombs placed by the player
+	
+	// queue used to store bombs that have already detonated to track when to remove flames
+	protected Queue detonatedQueue; 
 
     public Player(int x, int y, int playerNum)
     {
@@ -30,14 +33,16 @@ public class Player extends Entity {
         moveBoolean = false;
         
         bombQueue = new Queue();
+        detonatedQueue = new Queue();
     }
     
     // Method used to create a StackPane of the Player image
- 	public StackPane createImage(String playerFile) {
+    @Override
+ 	public StackPane createImage(String spaceFile, String playerFile) {
  		
  		StackPane pane = new StackPane();
  		
- 		Image tempImage = new Image("file:Space.png");
+ 		Image tempImage = new Image(spaceFile);
  		ImageView tempImageView = new ImageView(tempImage);
  		tempImageView.setFitHeight(50);
  		tempImageView.setFitWidth(50);

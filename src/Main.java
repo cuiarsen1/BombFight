@@ -13,6 +13,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Random;
 
+/*MAKE PLAYER LOSE LIVES
+Make it so that things dont disappear after a flame goes over it
+Display lives
+Make start menu*/
+
 public class Main extends Application {
 
 	private ArrayList<Player> playerList;
@@ -24,6 +29,7 @@ public class Main extends Application {
 	private AnimationTimer Timer;
 	
 	private long bombMax = 180; // The amount of time in frames before a bomb detonates
+	private long detonationMax = 60; // Time in frames before the flames from a bomb disappear
 	
 	//Method used to create a single image, either a Space, Crate, Item, or Flame
 	public StackPane createImage(String imageFile) {
@@ -184,13 +190,13 @@ public class Main extends Application {
 		if (playerNum == 1)
 		{
 			player = new Player(x, y, playerNum);
-			playerImage = player.createImage("file:PlayerRed.png");
+			playerImage = player.createImage("file:Space.png", "file:PlayerRed.png");
 		}
 			
 		else if (playerNum == 2)
 		{
 			player = new Player(x, y, playerNum);
-			playerImage = player.createImage("file:PlayerBlue.png");
+			playerImage = player.createImage("file:Space.png", "file:PlayerBlue.png");
 		}
     	
 		/*Adds the player to the specific coordinate specified 
@@ -265,7 +271,7 @@ public class Main extends Application {
 		
 		// Creates an image of the player in its new location it moved to
 		
-		StackPane playerView = playerList.get(playerNum - 1).getValue().createImage(playerFile);
+		StackPane playerView = playerList.get(playerNum - 1).getValue().createImage("file:Space.png", playerFile);
 		
 		HBox row = (HBox)root.getChildren().get(playerList.get(playerNum - 1).getValue().getY());
     	row.getChildren().set(playerList.get(playerNum - 1).getValue().getX(), playerView);
@@ -292,16 +298,16 @@ public class Main extends Application {
 		
 		// If the player picks up an Item, give them the corresponding power up
 		
-		if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()].type == 4)
+		if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()].type == 4 && playerList.get(playerNum - 1).getValue().bombMores < 3)
     	{
-    		playerList.get(playerNum - 1).getValue().bombMores += 1;
-    		System.out.println(playerList.get(playerNum - 1).getValue().bombMores);
+			BombMore bombMore = (BombMore) map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()].object;
+    		bombMore.powerUp(playerList.get(playerNum - 1).getValue());
     	}
     	
-    	if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()].type == 5)
+    	if (map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()].type == 5 && playerList.get(playerNum - 1).getValue().bombBoosts < 3)
     	{
-    		playerList.get(playerNum - 1).getValue().bombBoosts += 1;
-    		System.out.println(playerList.get(playerNum - 1).getValue().bombBoosts);
+    		BombBoost bombBoost = (BombBoost) map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList.get(playerNum - 1).getValue().getY()].object;
+    		bombBoost.powerUp(playerList.get(playerNum - 1).getValue());
     	}
 		
     	// Update the map on where the player is currently located
@@ -379,13 +385,21 @@ public class Main extends Application {
 	// Method used to detonate a player's Bomb
 	public Bomb detonate(Player player) {
 		
+		/*Removes this bomb from the active bombs queue, and adds it to the 
+		queue tracking when to make the detonation flames disappear*/
 		Bomb bomb = player.bombQueue.dequeue();
+		player.detonatedQueue.enqueue(bomb);
 		
 		int currentX = bomb.getX();
 		int currentY = bomb.getY();
 		
-		/*Creates flames from the detonation of a 
-		bomb, spreading outwards from the specified location*/
+		/*Booleans tracking whether a player has already been
+		hit by the detonation of a specific bomb*/
+		boolean player1Hurt = false;
+		boolean player2Hurt = false;
+		
+		/*Creates flames from the detonation of a bomb, 
+		spreading outwards from the specified location*/
 		
 		// Creates flames spreading upwards
 		
@@ -398,6 +412,24 @@ public class Main extends Application {
 			
 			HBox rowTemp = (HBox)root.getChildren().get(currentY);
 	    	rowTemp.getChildren().set(currentX, flameImage);
+	    	
+	    	if (player1Hurt == false)
+	    	{
+	    		if (playerList.get(0).getValue().getX() == currentX && playerList.get(0).getValue().getY() == currentY)
+	    		{
+	    			playerList.get(0).getValue().lives -= 1;
+	    			player1Hurt = true;
+	    		}
+	    	}
+	    	
+	    	if (player2Hurt == false)
+	    	{
+	    		if (playerList.get(1).getValue().getX() == currentX && playerList.get(1).getValue().getY() == currentY)
+	    		{
+	    			playerList.get(1).getValue().lives -= 1;
+	    			player2Hurt = true;
+	    		}
+	    	}
 	    	
 	    	Triple triple = new Triple(6, null, false);
 	    	map.mapArray[currentX][currentY] = triple;
@@ -420,6 +452,24 @@ public class Main extends Application {
 			HBox rowTemp = (HBox)root.getChildren().get(currentY);
 	    	rowTemp.getChildren().set(currentX, flameImage);
 	    	
+	    	if (player1Hurt == false)
+	    	{
+	    		if (playerList.get(0).getValue().getX() == currentX && playerList.get(0).getValue().getY() == currentY)
+	    		{
+	    			playerList.get(0).getValue().lives -= 1;
+	    			player1Hurt = true;
+	    		}
+	    	}
+	    	
+	    	if (player2Hurt == false)
+	    	{
+	    		if (playerList.get(1).getValue().getX() == currentX && playerList.get(1).getValue().getY() == currentY)
+	    		{
+	    			playerList.get(1).getValue().lives -= 1;
+	    			player2Hurt = true;
+	    		}
+	    	}
+	    	
 	    	Triple triple = new Triple(6, null, false);
 	    	map.mapArray[currentX][currentY] = triple;
 	    	
@@ -440,6 +490,24 @@ public class Main extends Application {
 			
 			HBox rowTemp = (HBox)root.getChildren().get(currentY);
 	    	rowTemp.getChildren().set(currentX, flameImage);
+	    	
+	    	if (player1Hurt == false)
+	    	{
+	    		if (playerList.get(0).getValue().getX() == currentX && playerList.get(0).getValue().getY() == currentY)
+	    		{
+	    			playerList.get(0).getValue().lives -= 1;
+	    			player1Hurt = true;
+	    		}
+	    	}
+	    	
+	    	if (player2Hurt == false)
+	    	{
+	    		if (playerList.get(1).getValue().getX() == currentX && playerList.get(1).getValue().getY() == currentY)
+	    		{
+	    			playerList.get(1).getValue().lives -= 1;
+	    			player2Hurt = true;
+	    		}
+	    	}
 	    	
 	    	Triple triple = new Triple(6, null, false);
 	    	map.mapArray[currentX][currentY] = triple;
@@ -462,6 +530,24 @@ public class Main extends Application {
 			HBox rowTemp = (HBox)root.getChildren().get(currentY);
 	    	rowTemp.getChildren().set(currentX, flameImage);
 	    	
+	    	if (player1Hurt == false)
+	    	{
+	    		if (playerList.get(0).getValue().getX() == currentX && playerList.get(0).getValue().getY() == currentY)
+	    		{
+	    			playerList.get(0).getValue().lives -= 1;
+	    			player1Hurt = true;
+	    		}
+	    	}
+	    	
+	    	if (player2Hurt == false)
+	    	{
+	    		if (playerList.get(1).getValue().getX() == currentX && playerList.get(1).getValue().getY() == currentY)
+	    		{
+	    			playerList.get(1).getValue().lives -= 1;
+	    			player2Hurt = true;
+	    		}
+	    	}
+	    	
 	    	Triple triple = new Triple(6, null, false);
 	    	map.mapArray[currentX][currentY] = triple;
 	    	
@@ -469,6 +555,70 @@ public class Main extends Application {
 		}
 		
 		return bomb;
+	}
+	
+	// Method used to remove the flames from the detonation of a bomb from the screen
+	public void removeFlames(Player player) {
+		
+		Bomb bomb = player.detonatedQueue.dequeue();
+		
+		int currentX = bomb.getX();
+		int currentY = bomb.getY();
+		
+		// Removes the flames that were spread upwards
+		
+		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
+		{
+			if (currentY < 0)
+				break;
+			
+			if (map.mapArray[currentX][currentY].type == 6)
+				createSpace(currentX, currentY);
+			
+	    	currentY -= 1;
+		}
+		
+		currentX = bomb.getX();
+		currentY = bomb.getY();
+		
+		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
+		{
+			if (currentY > 11)
+				break;
+			
+			if (map.mapArray[currentX][currentY].type == 6)
+				createSpace(currentX, currentY);
+	    	
+	    	currentY += 1;
+		}
+		
+		currentX = bomb.getX();
+		currentY = bomb.getY();
+		
+		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
+		{
+			if (currentX > 11)
+				break;
+			
+			if (map.mapArray[currentX][currentY].type == 6)
+				createSpace(currentX, currentY);
+	    	
+	    	currentX += 1;
+		}
+		
+		currentX = bomb.getX();
+		currentY = bomb.getY();
+		
+		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
+		{
+			if (currentX < 0)
+				break;
+			
+			if (map.mapArray[currentX][currentY].type == 6)
+				createSpace(currentX, currentY);
+	    	
+	    	currentX -= 1;
+		}
 	}
 	
 	// Method used to spawn items on the playing field
@@ -480,7 +630,7 @@ public class Main extends Application {
 		boolean coordinateFound = false; // Statement checking if an empty Space has been found
 		
 		int x = 0;
-		int y = 0;;
+		int y = 0;
 		
 		// Generate random coordinates until one of them is an empty Space
 		while (coordinateFound == false)
@@ -494,23 +644,25 @@ public class Main extends Application {
 		
 		if (itemNum == 0)
 		{
+			BombMore bombMore = new BombMore(x, y);
 			StackPane bombMoreImage = createImage("file:BombMore.jpg");
 			
 			HBox rowTemp = (HBox)root.getChildren().get(y);
 	    	rowTemp.getChildren().set(x, bombMoreImage);
 	    	
-	    	Triple triple = new Triple(4, null, false);
+	    	Triple triple = new Triple(4, bombMore, false);
 	    	map.mapArray[x][y] = triple;
 		}
 		
 		else if (itemNum == 1)
 		{
+			BombBoost bombBoost = new BombBoost(x, y);
 			StackPane bombBoostImage = createImage("file:BombBoost.jpg");
 			
 			HBox rowTemp = (HBox)root.getChildren().get(y);
 	    	rowTemp.getChildren().set(x, bombBoostImage);
 	    	
-	    	Triple triple = new Triple(5, null, false);
+	    	Triple triple = new Triple(5, bombBoost, false);
 	    	map.mapArray[x][y] = triple;
 		}
 	}
@@ -532,7 +684,7 @@ public class Main extends Application {
 		
 		//Bomb bomb = createBomb(player1);
 		
-		Scene scene = new Scene(root, 600, 600);
+		Scene scene = new Scene(root, 600, 700);
 		
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			
@@ -735,6 +887,8 @@ public class Main extends Application {
 	private void upDateCollision() throws IOException {
 		collisionCheck(1);
 		collisionCheck(2);
+		
+		System.out.println(playerList.get(0).getValue().lives);
 	}
 	
 	private void upDateMove() throws IOException {
@@ -786,6 +940,33 @@ public class Main extends Application {
 				detonate(playerList.get(1).getValue());
 			}
 		}
+		
+		if (playerList.get(0).getValue().detonatedQueue.size() > 0)
+		{
+			for (int i = 0; i < playerList.get(0).getValue().detonatedQueue.size(); i += 1)
+			{
+				playerList.get(0).getValue().detonatedQueue.queue[i].timerDisappear += 1;
+			}
+			
+			if (playerList.get(0).getValue().detonatedQueue.peek().timerDisappear >= detonationMax)
+			{
+				removeFlames(playerList.get(0).getValue());
+			}
+		}
+		
+		if (playerList.get(1).getValue().detonatedQueue.size() > 0)
+		{
+			for (int i = 0; i < playerList.get(1).getValue().detonatedQueue.size(); i += 1)
+			{
+				playerList.get(1).getValue().detonatedQueue.queue[i].timerDisappear += 1;
+			}
+			
+			if (playerList.get(1).getValue().detonatedQueue.peek().timerDisappear >= detonationMax)
+			{
+				removeFlames(playerList.get(1).getValue());
+			}
+		}
+		
 	}
 	
 	// Every 10 seconds, an item will spawn on the field

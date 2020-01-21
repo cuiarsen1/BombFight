@@ -2,9 +2,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
-public class Bomb extends Entity {
+public class Bomb extends Entity implements CreateImage {
 	
 	protected long timer = 0; // tracks how long the bomb has existed to track when to detonate
+	
+	// tracks how long the detonation has lasted to know when to remove flames
+	protected long timerDisappear = 0; 
 	
     public Bomb(int x, int y)
     {
@@ -12,6 +15,7 @@ public class Bomb extends Entity {
     }
     
     // Method used to create a StackPane of the Bomb image
+    @Override
     public StackPane createImage(String bombFile, String playerFile) {
     	
     	StackPane pane = new StackPane();

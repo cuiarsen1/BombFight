@@ -1,4 +1,4 @@
-public abstract class Entity {
+public class Entity {
 
     protected int x;
     protected int y;
