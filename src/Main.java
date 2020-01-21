@@ -1,7 +1,10 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -9,14 +12,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Random;
 
-/*MAKE PLAYER LOSE LIVES
+/*
 Make it so that things dont disappear after a flame goes over it
-Display lives
-Make start menu*/
+*/
 
 public class Main extends Application {
 
@@ -29,7 +33,16 @@ public class Main extends Application {
 	private AnimationTimer Timer;
 	
 	private long bombMax = 180; // The amount of time in frames before a bomb detonates
-	private long detonationMax = 60; // Time in frames before the flames from a bomb disappear
+	private long detonationMax = 30; // Time in frames before the flames from a bomb disappear
+	
+	// Labels displaying the current amount of lives of each player
+	private Label player1Lives;
+	private Label player2Lives;
+	
+	private Button startButton;
+	
+	private Font FONT_LIVES;
+	private Font FONT_BUTTON;
 	
 	//Method used to create a single image, either a Space, Crate, Item, or Flame
 	public StackPane createImage(String imageFile) {
@@ -178,6 +191,33 @@ public class Main extends Application {
     	
 		Triple triple = new Triple(0, null, false);
 		map.mapArray[x][y] = triple;
+	}
+	
+	// Method used to start the game
+	public void gameStart() {
+	
+		createPlayer(1, 0, 6);
+		createPlayer(2, 11, 5);
+		
+		root.getChildren().remove(startButton);
+		
+		// Labels displaying the amount of lives the players have
+		player1Lives = new Label("Player 1: " + playerList.get(0).getValue().lives + " lives");
+		player1Lives.setFont(FONT_LIVES);
+		player1Lives.setTextFill(Color.BLACK);
+		
+		player2Lives = new Label("Player 2: " + playerList.get(1).getValue().lives + " lives");
+		player2Lives.setFont(FONT_LIVES);
+		player2Lives.setTextFill(Color.BLACK);
+		
+		HBox livesBox = new HBox();
+		
+		livesBox.getChildren().addAll(player1Lives, player2Lives);
+		livesBox.setSpacing(150);
+		
+		root.getChildren().add(livesBox);
+		
+		Timer.start();
 	}
 	
 	// Creates and initializes the player on the field
@@ -679,12 +719,10 @@ public class Main extends Application {
 		// Initializes playing field
 		createMap();
 		
-		createPlayer(1, 0, 6);
-		createPlayer(2, 11, 5);
-		
-		//Bomb bomb = createBomb(player1);
-		
 		Scene scene = new Scene(root, 600, 700);
+		
+		FONT_LIVES = new Font("Arial", 30);
+		FONT_BUTTON = new Font("Arial", 25);
 		
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			
@@ -702,7 +740,6 @@ public class Main extends Application {
 					playerList.get(0).getValue().moveBoolean = true;
 					playerList.get(0).getValue().moveDirection = 1;
 				}
-					
 				
 				else if (event.getCode() == KeyCode.S)
 				{
@@ -761,30 +798,13 @@ public class Main extends Application {
 
 				// Handles stopping movement for the players
 				
-				if (event.getCode() == KeyCode.W)
-				{
-					playerList.get(0).getValue().moveBoolean = false;
-					playerList.get(0).getValue().moveDirection = 0;
-				}
-					
-					
-				else if (event.getCode() == KeyCode.S)
-				{
-					playerList.get(0).getValue().moveBoolean = false;
-					playerList.get(0).getValue().moveDirection = 0;
-				}
-
-				else if (event.getCode() == KeyCode.D)
+				if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.S || event.getCode() == KeyCode.D || event.getCode() == KeyCode.A)
 				{
 					playerList.get(0).getValue().moveBoolean = false;
 					playerList.get(0).getValue().moveDirection = 0;
 				}
 				
-				else if (event.getCode() == KeyCode.A)
-				{
-					playerList.get(0).getValue().moveBoolean = false;
-					playerList.get(0).getValue().moveDirection = 0;
-				}
+				// Handles placing a bomb from Player 1
 				
 				if (event.getCode() == KeyCode.C && playerList.get(0).getValue().bombQueue.size() < playerList.get(0).getValue().bombMores + 1)
 				{
@@ -794,29 +814,13 @@ public class Main extends Application {
 				
 				// Handles stopping movement for Player 2
 				
-				if (event.getCode() == KeyCode.UP)
-				{
-					playerList.get(1).getValue().moveBoolean = false;
-					playerList.get(1).getValue().moveDirection = 0;
-				}
-
-				else if (event.getCode() == KeyCode.DOWN)
-				{
-					playerList.get(1).getValue().moveBoolean = false;
-					playerList.get(1).getValue().moveDirection = 0;
-				}
-
-				else if (event.getCode() == KeyCode.RIGHT)
+				if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT)
 				{
 					playerList.get(1).getValue().moveBoolean = false;
 					playerList.get(1).getValue().moveDirection = 0;
 				}
 				
-				else if (event.getCode() == KeyCode.LEFT)
-				{
-					playerList.get(1).getValue().moveBoolean = false;
-					playerList.get(1).getValue().moveDirection = 0;
-				}
+				// Handles placing a bomb from Player 2
 				
 				if (event.getCode() == KeyCode.SLASH && playerList.get(1).getValue().bombQueue.size() < playerList.get(1).getValue().bombMores + 1)
 				{
@@ -825,7 +829,7 @@ public class Main extends Application {
 				}
 			}
 		});
-		
+	
 		// Animation timer used to animate the game
 		Timer = new AnimationTimer() {
 
@@ -841,17 +845,19 @@ public class Main extends Application {
 			public void handle(long time) {
 				
 				oldTimeVelocity += 1;
-
-				// Move the player every fifth of a second if direction key held down
 				
 				try {
-					upDateCollision();
+					
+					// Track collisions of players and detonations of bombs every frame
+					
+					upDate();
 					upDateDetonate();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				
+				// Move the players if a movement key is held down in intervals of a few milliseconds
 				if (time - oldTimeVelocity > intervalVelocity) {
 					try {
 						upDateMove();
@@ -863,6 +869,7 @@ public class Main extends Application {
 					oldTimeVelocity = time;
 				}
 				
+				// Every 10 seconds, add an Item to the screen
 				if (time - oldTimeItem > intervalItem)
 				{
 					try {
@@ -878,15 +885,34 @@ public class Main extends Application {
 			}
 		};
 		
-		Timer.start();
+		startButton = new Button("Start Game");
+		startButton.setFont(FONT_BUTTON);
+		
+		// Button used to start the game
+		startButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			public void handle(ActionEvent arg0) {
+				gameStart();
+			}
+		});
+		
+		root.getChildren().add(startButton);
+		
+		
+		
+		//Timer.start();
 		primaryStage.setTitle("Bomb Fight");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
-	private void upDateCollision() throws IOException {
+	// This method runs every frame to track collisions and updates to the players' lives
+	private void upDate() throws IOException {
 		collisionCheck(1);
 		collisionCheck(2);
+		
+		player1Lives.setText("Player 1: " + playerList.get(0).getValue().lives + " lives");
+		player2Lives.setText("Player 2: " + playerList.get(1).getValue().lives + " lives");
 		
 		System.out.println(playerList.get(0).getValue().lives);
 	}
@@ -918,55 +944,38 @@ public class Main extends Application {
 		if (playerList.get(0).getValue().bombQueue.size() > 0)
 		{	
 			for (int i = 0; i < playerList.get(0).getValue().bombQueue.size(); i += 1)
-			{
 				playerList.get(0).getValue().bombQueue.queue[i].timer += 1;
-			}
 			
 			if (playerList.get(0).getValue().bombQueue.peek().timer >= bombMax)
-			{
 				detonate(playerList.get(0).getValue());
-			}
 		}
 		
 		if (playerList.get(1).getValue().bombQueue.size() > 0)
 		{
 			for (int i = 0; i < playerList.get(1).getValue().bombQueue.size(); i += 1)
-			{
 				playerList.get(1).getValue().bombQueue.queue[i].timer += 1;
-			}
 			
 			if (playerList.get(1).getValue().bombQueue.peek().timer >= bombMax)
-			{
 				detonate(playerList.get(1).getValue());
-			}
 		}
 		
 		if (playerList.get(0).getValue().detonatedQueue.size() > 0)
 		{
 			for (int i = 0; i < playerList.get(0).getValue().detonatedQueue.size(); i += 1)
-			{
 				playerList.get(0).getValue().detonatedQueue.queue[i].timerDisappear += 1;
-			}
 			
 			if (playerList.get(0).getValue().detonatedQueue.peek().timerDisappear >= detonationMax)
-			{
 				removeFlames(playerList.get(0).getValue());
-			}
 		}
 		
 		if (playerList.get(1).getValue().detonatedQueue.size() > 0)
 		{
 			for (int i = 0; i < playerList.get(1).getValue().detonatedQueue.size(); i += 1)
-			{
 				playerList.get(1).getValue().detonatedQueue.queue[i].timerDisappear += 1;
-			}
 			
 			if (playerList.get(1).getValue().detonatedQueue.peek().timerDisappear >= detonationMax)
-			{
 				removeFlames(playerList.get(1).getValue());
-			}
 		}
-		
 	}
 	
 	// Every 10 seconds, an item will spawn on the field
