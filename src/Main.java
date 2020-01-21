@@ -1,3 +1,17 @@
+// Arsen Cui
+// ICS4U1-01
+// January 21, 2020
+// Mr. Radulovic
+// ICS4U1 Culminating Activity - Bomb Fight
+/*This program is a 2D game played by 2 players on a 12x12 grid. Each player has 3 lives, and if 
+one of the players loses all 3 of their lives, the other player wins. Each player can place bombs, 
+and the bomb will detonate in the shape of a plus sign, in all 4 directions (up, down, left and 
+right). If a Player is hit by the detonation, they lose a life. Player 1 moves with WASD, and 
+Player 2 moves with the arrow keys. Player 1 places a bomb down with the C button, and Player 2
+places a bomb down with the slash (/) button. Items spawn around the screen every 10 seconds. The
+items a Player could get is a Bomb More (Allows the Player to place 1 more Bomb at a time) and a 
+Bomb Boost (increases the range of the Player's bomb detonation by 1 grid in all directions)*/
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -17,17 +31,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Random;
-
-/*0 Space
-1 Crate
-2 Player
-3 Bomb More
-4 Bomb Boost
-5 Flame*/
-
-/*
-Make it so that tne player doesnt disappear after a flame goes over it
-*/
 
 public class Main extends Application {
 
@@ -68,10 +71,8 @@ public class Main extends Application {
 		return pane;
 	}
 
-	/*
-	 * Creates an image as a StackPane for the case when there are 2 images on top
-	 * of each other, such as a Bomb on a grid or a Player on a grid
-	 */
+	/* Creates an image as a StackPane for the case when there are 2 images on top of each other,
+	 * such as a Bomb on a grid or a Player on a grid */
 	public StackPane createImage(String imageFile1, String imageFile2) {
 
 		StackPane pane = new StackPane();
@@ -185,10 +186,12 @@ public class Main extends Application {
 		Triple triple = new Triple(0, null, false);
 		map.mapArray[x][y] = triple;
 	}
-	
+
 	// Method used to start the game
 	public void gameStart() {
 
+		// Initializes the initial coordinates of the players
+		
 		int player1X = 0;
 		int player1Y = 6;
 
@@ -210,7 +213,7 @@ public class Main extends Application {
 		player2Lives = new Label("Player 2: " + playerList.get(1).getValue().lives + " lives");
 		player2Lives.setFont(FONT_LIVES);
 		player2Lives.setTextFill(Color.BLACK);
-
+		
 		HBox livesBox = new HBox();
 
 		livesBox.getChildren().addAll(player1Lives, player2Lives);
@@ -384,7 +387,8 @@ public class Main extends Application {
 				.getValue().getY()] = triple;
 	}
 
-	// Checks for collisions with all the edges of the screen, crate, bomb, or player
+	// Checks for collisions with all the edges of the screen, crate, bomb, or
+	// player
 	public void collisionCheck(int playerNum) {
 
 		if (playerList.isEmpty())
@@ -405,7 +409,7 @@ public class Main extends Application {
 						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList
 								.get(playerNum - 1).getValue().getY() - 1].bombExist == false
 						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList
-						        .get(playerNum - 1).getValue().getY() - 1].type != 5)
+								.get(playerNum - 1).getValue().getY() - 1].type != 5)
 				{
 					// Allow the Player to move
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
@@ -435,7 +439,7 @@ public class Main extends Application {
 						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList
 								.get(playerNum - 1).getValue().getY() + 1].bombExist == false
 						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX()][playerList
-						        .get(playerNum - 1).getValue().getY() + 1].type != 5)
+								.get(playerNum - 1).getValue().getY() + 1].type != 5)
 				{
 					// Allow the Player to move
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
@@ -459,13 +463,14 @@ public class Main extends Application {
 				// If the grid that the Player is trying to move to is not a Crate, Player or
 				// Bomb
 				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList
-  						.get(playerNum - 1).getValue().getY()].type != 1
-  						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList
-  								.get(playerNum - 1).getValue().getY()].type != 2
-  						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList
-  								.get(playerNum - 1).getValue().getY()].bombExist == false
-  						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX() + 1][playerList
-  						        .get(playerNum - 1).getValue().getY()].type != 5)
+						.get(playerNum - 1).getValue().getY()].type != 1
+						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX()
+								+ 1][playerList.get(playerNum - 1).getValue().getY()].type != 2
+						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX()
+								+ 1][playerList.get(playerNum - 1).getValue()
+										.getY()].bombExist == false
+						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX()
+								+ 1][playerList.get(playerNum - 1).getValue().getY()].type != 5)
 				{
 					// Allow the Player to move
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
@@ -474,7 +479,7 @@ public class Main extends Application {
 				else
 					// Stop the Player from moving
 					playerList.get(playerNum - 1).getValue().moveBoolean = false;
-			} 
+			}
 			// If the player hits the edge of the screen, stop them from moving further
 			else
 				playerList.get(playerNum - 1).getValue().moveBoolean = false;
@@ -490,231 +495,211 @@ public class Main extends Application {
 				// Bomb
 				if (map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList
 						.get(playerNum - 1).getValue().getY()].type != 1
-						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList
-								.get(playerNum - 1).getValue().getY()].type != 2
-						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList
-								.get(playerNum - 1).getValue().getY()].bombExist == false
-						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX() - 1][playerList
-						        .get(playerNum - 1).getValue().getY()].type != 5)
+						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX()
+								- 1][playerList.get(playerNum - 1).getValue().getY()].type != 2
+						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX()
+								- 1][playerList.get(playerNum - 1).getValue()
+										.getY()].bombExist == false
+						&& map.mapArray[playerList.get(playerNum - 1).getValue().getX()
+								- 1][playerList.get(playerNum - 1).getValue().getY()].type != 5)
 				{
 					// Allow the Player to move
 					playerList.get(playerNum - 1).getValue().moveBoolean = true;
-				} 
+				}
 				// If the grid that the Player is trying to move to is a Crate, Player or Bomb
 				else
 					// Stop the Player from moving
 					playerList.get(playerNum - 1).getValue().moveBoolean = false;
-			} 
+			}
 			// If the player hits the edge of the screen, stop them from moving further
 			else
 				playerList.get(playerNum - 1).getValue().moveBoolean = false;
 		}
 	}
-	
-	public void checkHurt(Player player, int currentX, int currentY) {
-		
-		if (player.getX() == currentX && player.getY() == currentY)
-		{
-			playerList.get(0).getValue().lives -= 1;
-			player1Hurt = true;
-			
-			StackPane flameImage = createImage("file:Flame.png");
 
-			HBox rowTemp = (HBox) root.getChildren().get(currentY);
-			rowTemp.getChildren().set(currentX, flameImage);
-			
-			Triple triple = new Triple(2, playerList.get(0).getValue(), false);
-			map.mapArray[currentX][currentY] = triple;
-		} 
-		else if (playerList.get(0).getValue().getX() != currentX
-				|| playerList.get(0).getValue().getY() != currentY)
-		{
-			StackPane flameImage = createImage("file:Flame.png");
-			
-			HBox rowTemp = (HBox) root.getChildren().get(currentY);
-			rowTemp.getChildren().set(currentX, flameImage);
+	// Creates a flame from a detonation where there is no Player on the same grid
+	public void createFlame(int x, int y, String imageFile) {
 
-			Triple triple = new Triple(5, null, false);
-			map.mapArray[currentX][currentY] = triple;
-		}
+		StackPane flameImage = createImage(imageFile);
+
+		HBox rowTemp = (HBox) root.getChildren().get(y);
+		rowTemp.getChildren().set(x, flameImage);
+
+		// Updates the map to track the flame
+		Triple triple = new Triple(5, null, false);
+		map.mapArray[x][y] = triple;
 	}
-	
+
+	// Creates a flame from a detonation where there is a Player on the same grid
+	public void createFlame(int x, int y, String imageFile, Player player) {
+
+		StackPane flameImage = createImage(imageFile);
+
+		HBox rowTemp = (HBox) root.getChildren().get(y);
+		rowTemp.getChildren().set(x, flameImage);
+
+		// Keeps the grid updated as a Player to keep track of their location
+		Triple triple = new Triple(2, player, false);
+		map.mapArray[x][y] = triple;
+	}
+
 	// Method used to detonate a Player's Bomb
 	public Bomb detonate(Player player) {
-		
-		/*Removes this bomb from the active bombs queue, and adds it to the queue
-		tracking when to make the detonation flames disappear*/
-		 
+
+		/* Removes this bomb from the active bombs queue, and adds it to the queue tracking when to
+		 * make the detonation flames disappear */
+
 		Bomb bomb = player.bombQueue.dequeue();
 		player.detonatedQueue.enqueue(bomb);
+		
+		int initialRange = 3; // The range of each bomb without any powerups
 
-		/*Gets the coordinates of the Bomb, which will then be incremented later
-		in all 4 directions to extend the range of the flames*/
+		/* Gets the coordinates of the Bomb, which will then be incremented later in all 4
+		 * directions to extend the range of the flames */
 		int currentX = bomb.getX();
 		int currentY = bomb.getY();
-		
-		/*Booleans tracking whether a player has already been hit by the detonation of
-		a specific bomb*/
-		 
+
+		/* Booleans tracking whether a player has already been hit by the detonation of a specific
+		 * bomb */
+
 		boolean player1Hurt = false;
 		boolean player2Hurt = false;
-		
-		/*Creates flames from the detonation of the Bomb, spreading outwards in all 4
-		directions from the Bomb*/
+
+		/* Creates flames from the detonation of the Bomb, spreading outwards in all 4 directions
+		 * from the Bomb */
 
 		// Creates flames spreading upwards
 
-		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
+		for (int i = 0; i < initialRange + player.bombBoosts; i += 1)
 		{
 			// If the flames have already hit the edge of the screen, don't continue further
 			if (currentY < 0)
 				break;
-			
-			// If Player 1 has not already been hurt by the detonation of this Bomb
-			if (player1Hurt == false)
+
+			// If Player 1 is standing in the path of a detonation
+			if (playerList.get(0).getValue().getX() == currentX
+					&& playerList.get(0).getValue().getY() == currentY)
 			{
-				if (playerList.get(0).getValue().getX() == currentX
-						&& playerList.get(0).getValue().getY() == currentY)
+				// If Player 1 has not already been hurt by the detonation of this Bomb
+				if (player1Hurt == false)
 				{
+					// Make Player 1 lose a life
 					playerList.get(0).getValue().lives -= 1;
 					player1Hurt = true;
-					
-					StackPane flameImage = createImage("file:Flame.png");
+				}
 
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, flameImage);
-					
-					Triple triple = new Triple(2, playerList.get(0).getValue(), false);
-					map.mapArray[currentX][currentY] = triple;
-				} 
-				else if (playerList.get(0).getValue().getX() != currentX
-						|| playerList.get(0).getValue().getY() != currentY)
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png", playerList.get(0).getValue());
+				
+			}
+			// If Player 1 is not standing in the path of the detonation
+			else if (playerList.get(0).getValue().getX() != currentX
+					|| playerList.get(0).getValue().getY() != currentY)
+			{
+				// Create the flames of the detonation without worrying about the player location
+				createFlame(currentX, currentY, "file:Flame.png");
+			}
+			
+			// If Player 2 is standing in the path of a detonation
+			if (playerList.get(1).getValue().getX() == currentX
+					&& playerList.get(1).getValue().getY() == currentY)
+			{
+				// If Player 2 has not already been hurt by the detonation of this Bomb
+				if (player2Hurt == false)
 				{
-					StackPane flameImage = createImage("file:Flame.png");
-					
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, flameImage);
-
-					Triple triple = new Triple(5, null, false);
-					map.mapArray[currentX][currentY] = triple;
+					// Make Player 2 lose a life
+					playerList.get(1).getValue().lives -= 1;
+					player2Hurt = true;
+				}
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png", playerList.get(1).getValue());
+			} 
+			// If Player 2 is not standing in the path of the detonation
+			else if (playerList.get(1).getValue().getX() != currentX
+					|| playerList.get(1).getValue().getY() != currentY)
+			{
+				/* If Player 1 was not hit by this bomb's detonation (meaning they are not in this
+				 * grid), then create a flame here. If Player 1 was hit by this detonation, that
+				 * means that flames were already created for this grid and no longer needs to be
+				 * created a second time */
+				if (player1Hurt == false)
+				{
+					// Create the flames of the detonation
+					createFlame(currentX, currentY, "file:Flame.png");
 				}
 			}
 			
-			if (player2Hurt == false)
-			{
-				if (playerList.get(1).getValue().getX() == currentX
-						&& playerList.get(1).getValue().getY() == currentY)
-				{
-					playerList.get(1).getValue().lives -= 1;
-					player2Hurt = true;
-					
-					StackPane flameImage = createImage("file:Flame.png");
-
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, flameImage);
-					
-					Triple triple = new Triple(2, playerList.get(1).getValue(), false);
-					map.mapArray[currentX][currentY] = triple;
-				} 
-				else if (playerList.get(1).getValue().getX() != currentX
-						|| playerList.get(1).getValue().getY() != currentY)
-				{
-					/*If Player 1 was not hit by this bomb's detonation (meaning they are not in 
-					this grid), then create a flame here. If Player 1 was hit by this detonation,
-					that means that flames were already created for this grid and no longer needs 
-					to be created a second time*/
-					if (player1Hurt == false)
-					{
-						StackPane flameImage = createImage("file:Flame.png");
-						
-						HBox rowTemp = (HBox) root.getChildren().get(currentY);
-						rowTemp.getChildren().set(currentX, flameImage);
-
-						Triple triple = new Triple(5, null, false);
-						map.mapArray[currentX][currentY] = triple;
-					}
-					
-				}
-			}
-
+			// Move the coordinate up to account for the next grid
 			currentY -= 1;
 		}
-
+		
 		currentX = bomb.getX();
 		currentY = bomb.getY();
 
 		// Creates flames spreading downwards
 
-		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
+		for (int i = 0; i < initialRange + player.bombBoosts; i += 1)
 		{
+			// If the flames have already hit the edge of the screen, don't continue further
 			if (currentY > 11)
 				break;
-
-			if (player1Hurt == false)
+			
+			// If Player 1 is standing in the path of a detonation
+			if (playerList.get(0).getValue().getX() == currentX
+					&& playerList.get(0).getValue().getY() == currentY)
 			{
-				if (playerList.get(0).getValue().getX() == currentX
-						&& playerList.get(0).getValue().getY() == currentY)
+				// If Player 1 has not already been hurt by the detonation of this Bomb
+				if (player1Hurt == false)
 				{
+					// Make Player 1 lose a life
 					playerList.get(0).getValue().lives -= 1;
 					player1Hurt = true;
-					
-					StackPane flameImage = createImage("file:Flame.png");
-
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, flameImage);
-					
-					Triple triple = new Triple(2, playerList.get(0).getValue(), false);
-					map.mapArray[currentX][currentY] = triple;
-				} 
-				else if (playerList.get(0).getValue().getX() != currentX
-						|| playerList.get(0).getValue().getY() != currentY)
-				{
-					StackPane flameImage = createImage("file:Flame.png");
-					
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, flameImage);
-
-					Triple triple = new Triple(5, null, false);
-					map.mapArray[currentX][currentY] = triple;
 				}
+				
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png", playerList.get(0).getValue());
 			}
-
-			if (player2Hurt == false)
+			
+			// If Player 1 is not standing in the path of the detonation
+			else if (playerList.get(0).getValue().getX() != currentX
+					|| playerList.get(0).getValue().getY() != currentY)
 			{
-				if (playerList.get(1).getValue().getX() == currentX
-						&& playerList.get(1).getValue().getY() == currentY)
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png");
+			}
+			
+			// If Player 2 is standing in the path of a detonation
+			if (playerList.get(1).getValue().getX() == currentX
+					&& playerList.get(1).getValue().getY() == currentY)
+			{
+				// If Player 2 has not already been hurt by the detonation of this Bomb
+				if (player2Hurt == false)
 				{
+					// Make Player 2 lose a life
 					playerList.get(1).getValue().lives -= 1;
 					player2Hurt = true;
-					
-					StackPane flameImage = createImage("file:Flame.png");
-
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, flameImage);
-					
-					Triple triple = new Triple(2, playerList.get(1).getValue(), false);
-					map.mapArray[currentX][currentY] = triple;
-				} 
-				else if (playerList.get(1).getValue().getX() != currentX
-						|| playerList.get(1).getValue().getY() != currentY)
+				}
+				
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png", playerList.get(1).getValue());
+			}
+			
+			// If Player 2 is not standing in the path of the detonation
+			else if (playerList.get(1).getValue().getX() != currentX
+					|| playerList.get(1).getValue().getY() != currentY)
+			{
+				/* If Player 1 was not hit by this bomb's detonation (meaning they are not in this
+				 * grid), then create a flame here. If Player 1 was hit by this detonation, that
+				 * means that flames were already created for this grid and no longer needs to be
+				 * created a second time */
+				if (player1Hurt == false)
 				{
-					/*If Player 1 was not hit by this bomb's detonation (meaning they are not in 
-					this grid), then create a flame here. If Player 1 was hit by this detonation,
-					that means that flames were already created for this grid and no longer needs 
-					to be created a second time*/
-					if (player1Hurt == false)
-					{
-						StackPane flameImage = createImage("file:Flame.png");
-						
-						HBox rowTemp = (HBox) root.getChildren().get(currentY);
-						rowTemp.getChildren().set(currentX, flameImage);
-
-						Triple triple = new Triple(5, null, false);
-						map.mapArray[currentX][currentY] = triple;
-					}
+					// Create the flames of the detonation
+					createFlame(currentX, currentY, "file:Flame.png");
 				}
 			}
 
+			// Move the coordinate down to account for the next grid
 			currentY += 1;
 		}
 
@@ -722,84 +707,69 @@ public class Main extends Application {
 		currentY = bomb.getY();
 
 		// Creates flames spreading to the right
-
-		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
+		
+		for (int i = 0; i < initialRange + player.bombBoosts; i += 1)
 		{
+			// If the flames have already hit the edge of the screen, don't continue further
 			if (currentX > 11)
 				break;
-
-			if (player1Hurt == false)
+			
+			// If Player 1 is standing in the path of a detonation
+			if (playerList.get(0).getValue().getX() == currentX
+					&& playerList.get(0).getValue().getY() == currentY)
 			{
-				if (playerList.get(0).getValue().getX() == currentX
-						&& playerList.get(0).getValue().getY() == currentY)
+				// If Player 1 has not already been hurt by the detonation of this Bomb
+				if (player1Hurt == false)
 				{
+					// Make Player 1 lose a life
 					playerList.get(0).getValue().lives -= 1;
 					player1Hurt = true;
-					
-					StackPane flameImage = createImage("file:Flame.png");
-
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, flameImage);
-					
-					Triple triple = new Triple(2, playerList.get(0).getValue(), false);
-					map.mapArray[currentX][currentY] = triple;
-				} 
-				else if (playerList.get(0).getValue().getX() != currentX
-						|| playerList.get(0).getValue().getY() != currentY)
+				}
+				
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png", playerList.get(0).getValue());
+			}
+			
+			// If Player 1 is not standing in the path of the detonation
+			else if (playerList.get(0).getValue().getX() != currentX
+					|| playerList.get(0).getValue().getY() != currentY)
+			{
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png");
+			}
+			
+			// If Player 2 is standing in the path of a detonation
+			if (playerList.get(1).getValue().getX() == currentX
+					&& playerList.get(1).getValue().getY() == currentY)
+			{
+				// If Player 2 has not already been hurt by the detonation of this Bomb
+				if (player2Hurt == false)
 				{
-					/*If Player 1 was not hit by this bomb's detonation (meaning they are not in 
-					this grid), then create a flame here. If Player 1 was hit by this detonation,
-					that means that flames were already created for this grid and no longer needs 
-					to be created a second time*/
-					if (player1Hurt == false)
-					{
-						StackPane flameImage = createImage("file:Flame.png");
-						
-						HBox rowTemp = (HBox) root.getChildren().get(currentY);
-						rowTemp.getChildren().set(currentX, flameImage);
-
-						Triple triple = new Triple(5, null, false);
-						map.mapArray[currentX][currentY] = triple;
-					}
+					// Make Player 2 lose a life
+					playerList.get(1).getValue().lives -= 1;
+					player2Hurt = true;
+				}
+				
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png", playerList.get(1).getValue());
+			}
+			
+			// If Player 2 is not standing in the path of the detonation
+			else if (playerList.get(1).getValue().getX() != currentX
+					|| playerList.get(1).getValue().getY() != currentY)
+			{
+				/* If Player 1 was not hit by this bomb's detonation (meaning they are not in this
+				 * grid), then create a flame here. If Player 1 was hit by this detonation, that
+				 * means that flames were already created for this grid and no longer needs to be
+				 * created a second time */
+				if (player1Hurt == false)
+				{
+					// Create the flames of the detonation
+					createFlame(currentX, currentY, "file:Flame.png");
 				}
 			}
 			
-			if (player2Hurt == false)
-			{
-				if (playerList.get(1).getValue().getX() == currentX
-						&& playerList.get(1).getValue().getY() == currentY)
-				{
-					playerList.get(1).getValue().lives -= 1;
-					player2Hurt = true;
-					
-					StackPane flameImage = createImage("file:Flame.png");
-
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, flameImage);
-					
-					Triple triple = new Triple(2, playerList.get(1).getValue(), false);
-					map.mapArray[currentX][currentY] = triple;
-				} 
-				else if (playerList.get(1).getValue().getX() != currentX
-						|| playerList.get(1).getValue().getY() != currentY)
-				{
-					/*If Player 1 was not hit by this bomb's detonation (meaning they are not in 
-					this grid), then create a flame here. If Player 1 was hit by this detonation,
-					that means that flames were already created for this grid and no longer needs 
-					to be created a second time*/
-					if (player1Hurt == false)
-					{
-						StackPane flameImage = createImage("file:Flame.png");
-						
-						HBox rowTemp = (HBox) root.getChildren().get(currentY);
-						rowTemp.getChildren().set(currentX, flameImage);
-
-						Triple triple = new Triple(5, null, false);
-						map.mapArray[currentX][currentY] = triple;
-					}
-				}
-			}
-
+			// Move the coordinate to the right to account for the next grid
 			currentX += 1;
 		}
 
@@ -808,94 +778,113 @@ public class Main extends Application {
 
 		// Creates flames spreading to the left
 
-		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
+		for (int i = 0; i < initialRange + player.bombBoosts; i += 1)
 		{
+			// If the flames have already hit the edge of the screen, don't continue further
 			if (currentX < 0)
 				break;
-
-			if (player1Hurt == false)
+			
+			// If Player 1 is standing in the path of a detonation
+			if (playerList.get(0).getValue().getX() == currentX
+					&& playerList.get(0).getValue().getY() == currentY)
 			{
-				if (playerList.get(0).getValue().getX() == currentX
-						&& playerList.get(0).getValue().getY() == currentY)
+				// If Player 1 has not already been hurt by the detonation of this Bomb
+				if (player1Hurt == false)
 				{
+					// Make Player 1 lose a life
 					playerList.get(0).getValue().lives -= 1;
 					player1Hurt = true;
-					
-					StackPane flameImage = createImage("file:Flame.png");
-
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, flameImage);
-					
-					Triple triple = new Triple(2, playerList.get(0).getValue(), false);
-					map.mapArray[currentX][currentY] = triple;
-				} 
-				else if (playerList.get(0).getValue().getX() != currentX
-						|| playerList.get(0).getValue().getY() != currentY)
-				{
-					/*If Player 1 was not hit by this bomb's detonation (meaning they are not in 
-					this grid), then create a flame here. If Player 1 was hit by this detonation,
-					that means that flames were already created for this grid and no longer needs 
-					to be created a second time*/
-					if (player1Hurt == false)
-					{
-						StackPane flameImage = createImage("file:Flame.png");
-						
-						HBox rowTemp = (HBox) root.getChildren().get(currentY);
-						rowTemp.getChildren().set(currentX, flameImage);
-
-						Triple triple = new Triple(5, null, false);
-						map.mapArray[currentX][currentY] = triple;
-					}
 				}
+				
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png", playerList.get(0).getValue());
 			}
-
-			if (player2Hurt == false)
+			
+			// If Player 1 is not standing in the path of the detonation
+			else if (playerList.get(0).getValue().getX() != currentX
+					|| playerList.get(0).getValue().getY() != currentY)
 			{
-				if (playerList.get(1).getValue().getX() == currentX
-						&& playerList.get(1).getValue().getY() == currentY)
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png");
+			}
+			
+			// If Player 2 is standing in the path of a detonation
+			if (playerList.get(1).getValue().getX() == currentX
+					&& playerList.get(1).getValue().getY() == currentY)
+			{
+				// If Player 2 has not already been hurt by the detonation of this Bomb
+				if (player2Hurt == false)
 				{
+					// Make Player 2 lose a life
 					playerList.get(1).getValue().lives -= 1;
 					player2Hurt = true;
-					
-					StackPane flameImage = createImage("file:Flame.png");
-
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, flameImage);
-					
-					Triple triple = new Triple(2, playerList.get(1).getValue(), false);
-					map.mapArray[currentX][currentY] = triple;
-				} 
-				else if (playerList.get(1).getValue().getX() != currentX
-						|| playerList.get(1).getValue().getY() != currentY)
+				}
+				
+				// Create the flames of the detonation
+				createFlame(currentX, currentY, "file:Flame.png", playerList.get(1).getValue());
+			}
+			
+			// If Player 2 is not standing in the path of the detonation
+			else if (playerList.get(1).getValue().getX() != currentX
+					|| playerList.get(1).getValue().getY() != currentY)
+			{
+				/* If Player 1 was not hit by this bomb's detonation (meaning they are not in this
+				 * grid), then create a flame here. If Player 1 was hit by this detonation, that
+				 * means that flames were already created for this grid and no longer needs to be
+				 * created a second time */
+				if (player1Hurt == false)
 				{
-					/*If Player 1 was not hit by this bomb's detonation (meaning they are not in 
-					this grid), then create a flame here. If Player 1 was hit by this detonation,
-					that means that flames were already created for this grid and no longer needs 
-					to be created a second time*/
-					if (player1Hurt == false)
-					{
-						StackPane flameImage = createImage("file:Flame.png");
-						
-						HBox rowTemp = (HBox) root.getChildren().get(currentY);
-						rowTemp.getChildren().set(currentX, flameImage);
-
-						Triple triple = new Triple(5, null, false);
-						map.mapArray[currentX][currentY] = triple;
-					}
+					// Create the flames of the detonation
+					createFlame(currentX, currentY, "file:Flame.png");
 				}
 			}
+			
+			// Move the coordinate to the left to account for the next grid
 			currentX -= 1;
 		}
 
 		return bomb;
 	}
-
+	
+	// Method used to check whether a grid containing a flame has a Player in it or just a flame
+	public void flameCheck(int x, int y) {
+		
+		// If this grid contains a flame, remove it
+		if (map.mapArray[x][y].type == 5)
+			createSpace(x, y);
+		
+		
+		// If this grid contains a flame and a Player, keep the Player there
+		else if (map.mapArray[x][y].type == 2)
+		{
+			Player tempPlayer = (Player) map.mapArray[x][y].object;
+			
+			// Case of Player 1
+			if (tempPlayer.playerNum == 1)
+			{
+				StackPane playerImage = createImage("file:Space.png", "file:PlayerRed.png");
+				HBox rowTemp = (HBox) root.getChildren().get(y);
+				rowTemp.getChildren().set(x, playerImage);
+			} 
+			
+			// Case of Player 2
+			else if (tempPlayer.playerNum == 2)
+			{
+				StackPane playerImage = createImage("file:Space.png", "file:PlayerBlue.png");
+				HBox rowTemp = (HBox) root.getChildren().get(y);
+				rowTemp.getChildren().set(x, playerImage);
+			}
+		}
+	}
+	
 	// Method used to remove the flames from the detonation of a bomb from the
 	// screen
 	public void removeFlames(Player player) {
-
+		
+		// Removes the Bomb from the queue of bombs that have already been detonated
 		Bomb bomb = player.detonatedQueue.dequeue();
-
+		
+		// Current coodinates of the Bomb
 		int currentX = bomb.getX();
 		int currentY = bomb.getY();
 
@@ -903,133 +892,79 @@ public class Main extends Application {
 
 		for (int i = 0; i < 3 + player.bombBoosts; i += 1)
 		{
+			// If the flames have already hit the edge of the screen, don't continue further
 			if (currentY < 0)
 				break;
-
-			if (map.mapArray[currentX][currentY].type == 5)
-			{
-				createSpace(currentX, currentY);
-			}
 			
-			else if (map.mapArray[currentX][currentY].type == 2)
-			{
-				Player tempPlayer = (Player) map.mapArray[currentX][currentY].object;
-				if (tempPlayer.playerNum == 1)
-				{
-					StackPane playerImage = createImage("file:Space.png", "file:PlayerRed.png");
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, playerImage);
-				}
-				else if (tempPlayer.playerNum == 2)
-				{
-					StackPane playerImage = createImage("file:Space.png", "file:PlayerBlue.png");
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, playerImage);
-				}
-			}
-
+			/*Checks if the grid containing the flame also contains
+			a Player, and changes the image accordingly*/
+			flameCheck(currentX, currentY);
+			
+			// Move the coordinate up to account for the next grid
 			currentY -= 1;
 		}
 
 		currentX = bomb.getX();
 		currentY = bomb.getY();
 
+		// Removes the flames that were spread downwards
+		
 		for (int j = 0; j < 3 + player.bombBoosts; j += 1)
 		{
+			// If the flames have already hit the edge of the screen, don't continue further
 			if (currentY > 11)
 				break;
-
-			if (map.mapArray[currentX][currentY].type == 5)
-				createSpace(currentX, currentY);
 			
-			else if (map.mapArray[currentX][currentY].type == 2)
-			{
-				Player tempPlayer = (Player) map.mapArray[currentX][currentY].object;
-				if (tempPlayer.playerNum == 1)
-				{
-					StackPane playerImage = createImage("file:Space.png", "file:PlayerRed.png");
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, playerImage);
-				}
-				else if (tempPlayer.playerNum == 2)
-				{
-					StackPane playerImage = createImage("file:Space.png", "file:PlayerBlue.png");
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, playerImage);
-				}
-			}
-
+			/*Checks if the grid containing the flame also contains
+			a Player, and changes the image accordingly*/
+			flameCheck(currentX, currentY);
+			
+			// Move the coordinate down to account for the next grid
 			currentY += 1;
 		}
 
 		currentX = bomb.getX();
 		currentY = bomb.getY();
+		
+		// Removes the flames that were spread to the right
 
 		for (int k = 0; k < 3 + player.bombBoosts; k += 1)
 		{
+			// If the flames have already hit the edge of the screen, don't continue further
 			if (currentX > 11)
 				break;
-
-			if (map.mapArray[currentX][currentY].type == 5)
-				createSpace(currentX, currentY);
 			
-			else if (map.mapArray[currentX][currentY].type == 2)
-			{
-				Player tempPlayer = (Player) map.mapArray[currentX][currentY].object;
-				if (tempPlayer.playerNum == 1)
-				{
-					StackPane playerImage = createImage("file:Space.png", "file:PlayerRed.png");
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, playerImage);
-				}
-				else if (tempPlayer.playerNum == 2)
-				{
-					StackPane playerImage = createImage("file:Space.png", "file:PlayerBlue.png");
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, playerImage);
-				}
-			}
-
+			/*Checks if the grid containing the flame also contains
+			a Player, and changes the image accordingly*/
+			flameCheck(currentX, currentY);
+			
+			// Move the coordinate to the right to account for the next grid
 			currentX += 1;
 		}
 
 		currentX = bomb.getX();
 		currentY = bomb.getY();
+		
+		// Removes the flames that were spread to the left
 
 		for (int x = 0; x < 3 + player.bombBoosts; x += 1)
 		{
+			// If the flames have already hit the edge of the screen, don't continue further
 			if (currentX < 0)
 				break;
-
-			if (map.mapArray[currentX][currentY].type == 5)
-				createSpace(currentX, currentY);
 			
-			else if (map.mapArray[currentX][currentY].type == 2)
-			{
-				Player tempPlayer = (Player) map.mapArray[currentX][currentY].object;
-				if (tempPlayer.playerNum == 1)
-				{
-					StackPane playerImage = createImage("file:Space.png", "file:PlayerRed.png");
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, playerImage);
-				}
-				else if (tempPlayer.playerNum == 2)
-				{
-					StackPane playerImage = createImage("file:Space.png", "file:PlayerBlue.png");
-					HBox rowTemp = (HBox) root.getChildren().get(currentY);
-					rowTemp.getChildren().set(currentX, playerImage);
-				}
-			}
+			/*Checks if the grid containing the flame also contains
+			a Player, and changes the image accordingly*/
+			flameCheck(currentX, currentY);
 
 			currentX -= 1;
 		}
 	}
 
-		
-
 	// Method used to spawn items on the playing field
 	public void createItem() {
 
+		// Generates either a Bomb More or Bomb Boost
 		Random random = new Random();
 		int itemNum = random.nextInt(2);
 
@@ -1047,7 +982,8 @@ public class Main extends Application {
 			if (map.mapArray[x][y].type == 0)
 				coordinateFound = true;
 		}
-
+		
+		// If the item generated is a Bomb More, add it to the playing field
 		if (itemNum == 0)
 		{
 			BombMore bombMore = new BombMore(x, y);
@@ -1059,7 +995,8 @@ public class Main extends Application {
 			Triple triple = new Triple(3, bombMore, false);
 			map.mapArray[x][y] = triple;
 		}
-
+		
+		// If the item generated is a Bomb Boost, add it to the playing field
 		else if (itemNum == 1)
 		{
 			BombBoost bombBoost = new BombBoost(x, y);
@@ -1075,12 +1012,15 @@ public class Main extends Application {
 
 	// Method used to end the game
 	public void gameEnd(int playerWin) {
-
+		
+		// Clear the screen
 		root.getChildren().clear();
-
+		
 		Label endLabel = new Label();
 		endLabel.setFont(FONT_LIVES);
-
+		
+		// Display the winner
+		
 		if (playerWin == 1)
 		{
 			endLabel.setText("Player 1 Wins!");
@@ -1090,10 +1030,10 @@ public class Main extends Application {
 		{
 			endLabel.setText("Player 2 Wins!");
 		}
-
+		
 		root.getChildren().add(endLabel);
 
-		Timer.stop();
+		Timer.stop(); // Stop the game timer
 	}
 
 	@Override
@@ -1241,10 +1181,9 @@ public class Main extends Application {
 
 				try
 				{
-					
 					// Tracks collisions and Player lives every frame
 					upDate();
-					
+
 					// Track detonations of bombs every frame
 					upDateDetonate();
 				} catch (IOException e)
@@ -1253,8 +1192,7 @@ public class Main extends Application {
 					e.printStackTrace();
 				}
 
-				// Move the players if a movement key is held down in intervals of a few
-				// milliseconds
+				// Move the players if a movement key is held down in intervals of 150 milliseconds
 				if (time - oldTimeVelocity > intervalVelocity)
 				{
 					try
@@ -1286,11 +1224,11 @@ public class Main extends Application {
 
 			}
 		};
-
+		
+		// Button used to start the game
 		startButton = new Button("Start Game");
 		startButton.setFont(FONT_BUTTON);
-
-		// Button used to start the game
+		
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			public void handle(ActionEvent arg0) {
@@ -1300,13 +1238,12 @@ public class Main extends Application {
 
 		root.getChildren().add(startButton);
 
-		// Timer.start();
 		primaryStage.setTitle("Bomb Fight");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
-	// This method runs every frame to track collisions and updates to the players'
+	// This method runs every frame to track collisions and updates to the Players'
 	// lives
 	private void upDate() throws IOException {
 
@@ -1314,6 +1251,8 @@ public class Main extends Application {
 		collisionCheck(1);
 		collisionCheck(2);
 
+		// Updates the amount of lives of each Player
+		
 		player1Lives.setText("Player 1: " + playerList.get(0).getValue().lives + " lives");
 		player2Lives.setText("Player 2: " + playerList.get(1).getValue().lives + " lives");
 
@@ -1331,6 +1270,7 @@ public class Main extends Application {
 		}
 	}
 
+	// Every 150 milliseconds, if a movement key is held down, the Player will move
 	private void upDateMove() throws IOException {
 
 		if (playerList.get(0).getValue().moveBoolean == true)
@@ -1342,47 +1282,52 @@ public class Main extends Application {
 		{
 			movePlayers(2, "file:PlayerBlue.png");
 		}
-
-		playerList.get(0).getValue().moveBoolean = false;
-		playerList.get(1).getValue().moveBoolean = false;
 	}
-
+	
+	// Tracks the detonations of existing Bombs every frame
 	private void upDateDetonate() throws IOException {
 
-		// Increments the timer on every existing bomb
+		// Increments the timer on every existing Bomb to track when to detonate
 
-		if (playerList.get(0).getValue().bombQueue.size() > 0)
+		if (playerList.get(0).getValue().bombQueue.isEmpty() == false)
 		{
 			for (int i = 0; i < playerList.get(0).getValue().bombQueue.size(); i += 1)
 				playerList.get(0).getValue().bombQueue.queue[i].timer += 1;
 
+			// If the timer on this Bomb reaches the end, it will detonate
 			if (playerList.get(0).getValue().bombQueue.peek().timer >= bombMax)
 				detonate(playerList.get(0).getValue());
 		}
 
-		if (playerList.get(1).getValue().bombQueue.size() > 0)
+		if (playerList.get(1).getValue().bombQueue.isEmpty() == false)
 		{
 			for (int i = 0; i < playerList.get(1).getValue().bombQueue.size(); i += 1)
 				playerList.get(1).getValue().bombQueue.queue[i].timer += 1;
-
+			
+			// If the timer on this Bomb reaches the end, it will detonate
 			if (playerList.get(1).getValue().bombQueue.peek().timer >= bombMax)
 				detonate(playerList.get(1).getValue());
 		}
-
-		if (playerList.get(0).getValue().detonatedQueue.size() > 0)
+		
+		/*Increments the timer on every existing Bomb to track
+		when to remove the flames from a detonation*/
+		
+		if (playerList.get(0).getValue().detonatedQueue.isEmpty() == false)
 		{
 			for (int i = 0; i < playerList.get(0).getValue().detonatedQueue.size(); i += 1)
 				playerList.get(0).getValue().detonatedQueue.queue[i].timerDisappear += 1;
-
+			
+			// If the timer on this Bomb reaches the end, remove its flames from the screen
 			if (playerList.get(0).getValue().detonatedQueue.peek().timerDisappear >= detonationMax)
 				removeFlames(playerList.get(0).getValue());
 		}
 
-		if (playerList.get(1).getValue().detonatedQueue.size() > 0)
+		if (playerList.get(1).getValue().detonatedQueue.isEmpty() == false)
 		{
 			for (int i = 0; i < playerList.get(1).getValue().detonatedQueue.size(); i += 1)
 				playerList.get(1).getValue().detonatedQueue.queue[i].timerDisappear += 1;
-
+			
+			// If the timer on this Bomb reaches the end, remove its flames from the screen
 			if (playerList.get(1).getValue().detonatedQueue.peek().timerDisappear >= detonationMax)
 				removeFlames(playerList.get(1).getValue());
 		}

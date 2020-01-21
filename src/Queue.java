@@ -1,6 +1,12 @@
-/*Class used to create queues. The queue will be used to store Bomb objects in a first in first 
+// Arsen Cui
+// ICS4U1-01
+// January 21, 2020
+// Mr. Radulovic
+// ICS4U1 Culminating Activity - Bomb Fight
+/*Class used to create queues. A queue will be used to store Bomb objects in a first in first 
 out basis. This helps track how many bombs the player has placed at a time, and which bomb to 
-detonate first*/
+detonate first. A second queue will be used to store the Bombs that have already detonated, and 
+is used to track when to remove the flames from the detonation of a Bomb*/
 
 public class Queue {
 
@@ -10,7 +16,8 @@ public class Queue {
 
     public Queue()
     {
-        int queueSize = 5; // size of the array
+    	// Size of the queue. There can only be a maximum of 4 Bombs placed by one player at a time
+        int queueSize = 5;
         
         queue = new Bomb[queueSize];
 
@@ -23,7 +30,6 @@ public class Queue {
         queue[length] = n;
 
         length += 1;
-
     }
 
     // removes the first bomb from the queue
@@ -40,13 +46,11 @@ public class Queue {
         length -= 1;
 
         return bomb;
-
     }
 
     // returns the first bomb of the queue
     public Bomb peek() {
         return queue[0];
-
     }
 
     // returns the size of the queue

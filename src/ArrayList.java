@@ -1,3 +1,10 @@
+// Arsen Cui
+// ICS4U1-01
+// January 21, 2020
+// Mr. Radulovic
+// ICS4U1 Culminating Activity - Bomb Fight
+// This class is used to create ArrayList objects for the purpose of storing Player objects
+
 public class ArrayList<T> {
 	
 	private Node<T>[] list; // Array used to implement the ArrayList
@@ -39,6 +46,7 @@ public class ArrayList<T> {
 		return length;
 	}
 	
+	// Returns true if the list is empty, false if it is not empty
 	public boolean isEmpty() {
 		if (length > 0)
 			return false;

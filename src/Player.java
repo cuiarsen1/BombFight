@@ -1,7 +1,12 @@
+// Arsen Cui
+// ICS4U1-01
+// January 21, 2020
+// Mr. Radulovic
+// ICS4U1 Culminating Activity - Bomb Fight
+// Class used to create Player objects.
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 
 public class Player extends Entity implements CreateImage {
@@ -17,7 +22,8 @@ public class Player extends Entity implements CreateImage {
 	
 	protected Queue bombQueue; // queue used to store the bombs placed by the player
 	
-	// queue used to store bombs that have already detonated to track when to remove flames
+	/*queue used to store bombs that have already detonated
+	to track when to remove flames from a detonation*/
 	protected Queue detonatedQueue; 
 
     public Player(int x, int y, int playerNum)
@@ -52,6 +58,7 @@ public class Player extends Entity implements CreateImage {
  		playerView.setFitHeight(50);
  		playerView.setFitWidth(50);
  		
+ 		// StackPane used to display the Player on top of the Space image
  		pane.getChildren().addAll(tempImageView, playerView);
  		
  		return pane;
